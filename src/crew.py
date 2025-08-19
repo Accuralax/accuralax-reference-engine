@@ -6,6 +6,12 @@ import agentstack
 class AiagentCrew():
     """aiagent crew"""
 
+    @task
+    def CyberFusionSolutions(self) -> Task:
+        return Task(
+            config=self.tasks_config['CyberFusionSolutions'],
+        )
+
     @crew
     def crew(self) -> Crew:
         """Creates the Test crew"""
