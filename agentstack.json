@@ -1,0 +1,6 @@
+{
+  "framework": "crewai",
+  "agentstack_version": "0.3.7",
+  "template": "AIAgent",
+  "template_version": "4"
+}
