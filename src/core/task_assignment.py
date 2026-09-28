@@ -15,7 +15,8 @@ class TaskAssignment:
             c.execute("CREATE TABLE IF NOT EXISTS task_history(history_id TEXT PRIMARY KEY,task_id TEXT,tenant_id TEXT,workspace_id TEXT,actor_id TEXT,event TEXT,details TEXT,created_at TEXT)")
     @contextmanager
     def db(self):
-        c = sqlite3.connect(self.db_path)
+        c = sqlite3.connect(self.db_path, timeout=15.0)
+        c.execute('PRAGMA busy_timeout=15000')
         try:
             yield c
             c.commit()

@@ -15,7 +15,10 @@ class NotificationCenter:
             c.execute("CREATE TABLE IF NOT EXISTS templates(template_id TEXT PRIMARY KEY,tenant_id TEXT,workspace_id TEXT,name TEXT,channel TEXT,subject TEXT,body TEXT,active INTEGER,created_at TEXT)")
             c.execute("CREATE TABLE IF NOT EXISTS preferences(tenant_id TEXT,workspace_id TEXT,recipient TEXT,channel TEXT,enabled INTEGER,PRIMARY KEY(tenant_id,workspace_id,recipient,channel))")
             c.execute("CREATE TABLE IF NOT EXISTS jobs(job_id TEXT PRIMARY KEY,tenant_id TEXT,workspace_id TEXT,recipient TEXT,channel TEXT,template_id TEXT,subject TEXT,body TEXT,state TEXT,attempts INTEGER,last_error TEXT,idempotency_key TEXT,created_at TEXT,updated_at TEXT,metadata TEXT,UNIQUE(tenant_id,workspace_id,idempotency_key))")
-    def db(self): return sqlite3.connect(self.db_path)
+    def db(self):
+        c=sqlite3.connect(self.db_path, timeout=15.0)
+        c.execute('PRAGMA busy_timeout=15000')
+        return c
     def scope(self,t,w):
         if not t or not w: raise ValueError("tenant_id_and_workspace_id_required")
         return str(t),str(w)

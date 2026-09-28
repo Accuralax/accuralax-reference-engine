@@ -8,7 +8,7 @@ class AuditLineage:
         self.db_path=db_path or os.path.join('data','audit_lineage.sqlite3'); os.makedirs(os.path.dirname(self.db_path) or '.',exist_ok=True)
         with self.db() as c:c.execute('CREATE TABLE IF NOT EXISTS audit_events(audit_id TEXT PRIMARY KEY,tenant_id TEXT NOT NULL,workspace_id TEXT NOT NULL,actor_id TEXT NOT NULL,trace_id TEXT,correlation_id TEXT,source TEXT NOT NULL,event_type TEXT NOT NULL,entity_type TEXT,entity_id TEXT,reference_id TEXT,status TEXT NOT NULL,metadata_json TEXT NOT NULL,created_at TEXT NOT NULL)')
     def db(self):
-        c=sqlite3.connect(self.db_path); c.row_factory=sqlite3.Row
+        c=sqlite3.connect(self.db_path, timeout=15.0); c.execute('PRAGMA busy_timeout=15000'); c.row_factory=sqlite3.Row
         class C:
             def __enter__(s):return c
             def __exit__(s,*a):c.commit();c.close()

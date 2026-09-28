@@ -11,7 +11,7 @@ class Observability:
             c.execute('CREATE TABLE IF NOT EXISTS logs(id TEXT PRIMARY KEY,tenant_id TEXT,workspace_id TEXT,level TEXT,message TEXT,trace_id TEXT,correlation_id TEXT,metadata_json TEXT,created_at TEXT)')
             c.execute('CREATE TABLE IF NOT EXISTS traces(id TEXT PRIMARY KEY,tenant_id TEXT,workspace_id TEXT,trace_id TEXT,span TEXT,status TEXT,duration_ms REAL,metadata_json TEXT,created_at TEXT)')
     def db(self):
-        c=sqlite3.connect(self.db_path);c.row_factory=sqlite3.Row
+        c=sqlite3.connect(self.db_path, timeout=15.0);c.execute('PRAGMA busy_timeout=15000');c.row_factory=sqlite3.Row
         class C:
             def __enter__(s):return c
             def __exit__(s,*a):c.commit();c.close()
