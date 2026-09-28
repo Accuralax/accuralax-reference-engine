@@ -1,5 +1,4 @@
 from __future__ import annotations
-from typing import Any
 from .omega8_full_convergence import Omega8FullConvergence
 from .omega9_production_convergence import Omega9ProductionConvergence
 from .omega10_regulatory_convergence import Omega10RegulatoryConvergence
@@ -31,7 +30,8 @@ class ApexRuntimeBootstrap:
         self.invariants.register("omega11_governance_boundary", lambda: self.omega11.health().get("tenant_isolated") is True)
         self.invariants.register("omega12_evaluation_boundary", lambda: self.omega12.production_readiness().get("ready") is True)
         self.omega8=Omega8FullConvergence(invariants=self.invariants)
-        for i in range(1,6): self.omega15.control(f"APEX-CTRL-{i}", f"Production control {i}", owner="APEX", required=True, implemented=True)
+        for i in range(1,6):
+            self.omega15.control(f"APEX-CTRL-{i}", f"Production control {i}", owner="APEX", required=True, implemented=True)
         self.stages={f"omega{i}":getattr(self,f"omega{i}") for i in range(8,16)}
         self.convergence=OmegaFinalConvergence(**self.stages)
         self.certifier=ApexProductionCertification(self.stages)
@@ -46,9 +46,11 @@ class ApexRuntimeBootstrap:
     def _stage_gate(name, obj):
         if name=="omega15":
             return obj.final_gate({f"omega{i}":{"ready":True} for i in range(8,15)})
+        if name=="omega12":
+            r=obj.production_readiness()
+            return {"status":"ready" if r.get("ready") else "blocked","release_allowed":bool(r.get("ready")),"readiness":r}
         if hasattr(obj,"release_gate"):
-            try: return obj.release_gate()
-            except TypeError: return obj.release_gate()
+            return obj.release_gate()
         r=obj.production_readiness()
         return {"status":"ready" if r.get("ready") else "blocked","release_allowed":bool(r.get("ready"))}
 
@@ -62,4 +64,5 @@ class ApexRuntimeBootstrap:
         return {"status":"certified" if allowed else "blocked","release_allowed":allowed,"invariants":inv,"convergence":convergence,"certification":certification,"gates":self.gates()}
 
     def production_readiness(self):
-        c=self.certify(); return {"ready":c["release_allowed"],"status":c["status"],"certification":c}
+        c=self.certify()
+        return {"ready":c["release_allowed"],"status":c["status"],"certification":c}
