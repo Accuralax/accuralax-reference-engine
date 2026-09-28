@@ -41,7 +41,13 @@ class ContinuousRuntime:
 
     def stop(self):
         self.running = False
-        return {"status": "stopped", "ticks": self.ticks}
+
+    def reconcile(self):
+        """Reconcile the canonical worker state without executing new work."""
+        reconcile = getattr(self.worker, "reconcile", None)
+        if callable(reconcile):
+            return reconcile()
+        return {"status": "ok", "reconciled": False, "reason": "worker_has_no_reconcile"}
 
     def health(self):
         return {"status": "ok", "engine": "continuous-runtime", "running": self.running, "ticks": self.ticks}
