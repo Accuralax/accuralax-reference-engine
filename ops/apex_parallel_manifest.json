@@ -1,0 +1,26 @@
+{
+  "mode": "APEX-PARALLEL",
+  "verification_layers": {
+    "1_changed_code": "targeted tests for modified surfaces",
+    "2_affected_subsystem": "runtime, recovery, governance and security groups",
+    "3_integration": "cross-component and adapter contract tests",
+    "4_full_regression": "complete tests tree in isolated temp root",
+    "5_production_certification": "fail-closed local release gate",
+    "6_live_validation": "real credentials, external services and operator privilege"
+  },
+  "tracks": {
+    "A": "development",
+    "B": "verification",
+    "C": "production_readiness",
+    "D": "unattended_runtime",
+    "E": "release_evidence"
+  },
+  "external_blockers": [
+    "production credentials",
+    "Windows Administrator privilege",
+    "fresh full regression certification",
+    "live HubSpot/Make validation"
+  ],
+  "historical_evidence_policy": "immutable_until_fresh_run_is_valid",
+  "secret_policy": "no credentials in repository"
+}
