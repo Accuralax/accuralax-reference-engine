@@ -149,6 +149,7 @@ class AutonomousDeveloper:
         started = time.monotonic()
         try:
             completed = subprocess.run(command, cwd=self.root, capture_output=True, text=True,
+                                       stdin=subprocess.DEVNULL,
                                        timeout=max(5, min(int(timeout_seconds), 600)))
             output = (completed.stdout + "\n" + completed.stderr).strip()
             passed = completed.returncode == 0
@@ -250,7 +251,8 @@ class AutonomousDeveloper:
                 "agent_registry": self.agents.health(), "events": len(self.events)}
 
     def _git_changed(self) -> list[str]:
-        p = subprocess.run(["git", "status", "--short"], cwd=self.root, capture_output=True, text=True, timeout=15)
+        p = subprocess.run(["git", "status", "--short"], cwd=self.root, capture_output=True,
+                           stdin=subprocess.DEVNULL, text=True, timeout=15)
         out = []
         for line in p.stdout.splitlines():
             if len(line) > 3:

@@ -79,6 +79,7 @@ out/
 
 # Temporary development artifacts
 .tmp/
+.apex_tmp/
 tmp_*
 *.bak
 *_broken.py
