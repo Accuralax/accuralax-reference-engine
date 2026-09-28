@@ -36,6 +36,11 @@ class IntegrationReconciler:
         dead=sum(r["status"]=="dead_letter" for r in results)
         skipped=sum(r.get("reconciliation")=="skipped_dead_letter" for r in results)
         return ReconcileBatch(len(queue),len(queue)-skipped,completed,failed,dead,skipped,tuple(results))
+    def run_until_empty(self,tenant_id,workspace_id,**kwargs):
+        batches=self.run_until_stable(tenant_id,workspace_id,**kwargs)
+        last=batches[-1] if batches else {'scanned':0,'replayed':0}
+        return type('StableResult',(),last)()
+
     def run_until_stable(self,tenant_id,workspace_id,*,limit=100,max_cycles=10,replay_dead_letter=False):
         if max_cycles<1: raise ValueError("max_cycles_must_be_positive")
         batches=[]
