@@ -29,7 +29,7 @@ def test_autonomous_developer_fails_closed_without_generator(tmp_path):
     dev = AutonomousDeveloper(tmp_path)
     result = dev.generate_patch({"category": "test_regression"}, {"python_files": []})
     assert result["status"] == "blocked"
-    assert result["reason"] == "no_patch_generator_available"
+    assert result["reason"] == "provider_generation_adapter_not_configured"
 
 
 def test_supabase_adapter_is_fail_closed_without_credentials():

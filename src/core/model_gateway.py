@@ -138,6 +138,10 @@ class ModelGateway:
             "evaluation": result,
         }
 
+    def generate_developer_patch(self, *, tenant_id, workspace_id, agent_id, diagnosis, context):
+        """Generate only when a configured provider adapter explicitly supplies this method."""
+        return {"status": "blocked", "reason": "provider_generation_adapter_not_configured"}
+
     def health(self):
         with self.db() as c:
             models=c.execute("SELECT COUNT(*) FROM models").fetchone()[0]; policies=c.execute("SELECT COUNT(*) FROM policies").fetchone()[0]; decisions=c.execute("SELECT COUNT(*) FROM decisions").fetchone()[0]

@@ -118,6 +118,8 @@ class AutonomousDeveloper:
             patch = generator(diagnosis, context)
         else:
             patch = self._generated_patch_from_environment(diagnosis, context)
+        if patch and patch.get("status") == "blocked":
+            return {"status": "blocked", "reason": patch.get("reason", "provider_generation_blocked")}
         if not patch or not patch.get("target") or patch.get("replacement") is None:
             return {"status": "blocked", "reason": "no_patch_generator_available"}
         target = str(patch["target"]).replace("\\", "/")
@@ -184,6 +186,18 @@ class AutonomousDeveloper:
         return self.root in path.parents and path.suffix == ".py"
 
     def _generated_patch_from_environment(self, diagnosis: dict[str, Any], context: dict[str, Any]) -> dict[str, str] | None:
-        # A real model provider can be attached through an injected generator.
-        # We deliberately do not silently send source code to an external provider.
-        return None
+        """Resolve an explicitly configured generator; never silently call a provider."""
+        generator = getattr(self.models, "generate_developer_patch", None)
+        if not callable(generator):
+            return None
+        try:
+            return generator(
+                tenant_id=str(context.get("tenant_id", "system")),
+                workspace_id=str(context.get("workspace_id", "system")),
+                agent_id=self.developer_agent_id,
+                diagnosis=diagnosis,
+                context=context,
+            )
+        except Exception as exc:
+            self.events.append({"stage": "patch_generation", "status": "failed", "reason": f"{type(exc).__name__}: {exc}"})
+            return None
