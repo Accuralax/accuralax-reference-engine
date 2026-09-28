@@ -44,9 +44,18 @@ class SandboxVerifier:
     def create_sandbox(self, source: str | Path) -> Path:
         source_path = Path(source).resolve()
         sandbox = Path(tempfile.mkdtemp(prefix="cyberfusion-repair-"))
-        shutil.copytree(source_path, sandbox / source_path.name, dirs_exist_ok=True,
-                        ignore=shutil.ignore_patterns(".venv", "__pycache__", "*.sqlite3", ".git"))
-        return sandbox / source_path.name
+        # Repair verification only needs production source/config. Copying the
+        # entire workspace can traverse node_modules and other large artifacts,
+        # causing bounded verification to become effectively unbounded.
+        src_root = source_path / "src" if (source_path / "src").is_dir() else source_path
+        target = sandbox / "src"
+        shutil.copytree(
+            src_root,
+            target,
+            dirs_exist_ok=True,
+            ignore=shutil.ignore_patterns(".venv", "__pycache__", "*.sqlite3"),
+        )
+        return sandbox
 
     def verify(self, tests_passed: bool, health_passed: bool, rollback_ready: bool) -> VerificationResult:
         ok = tests_passed and health_passed and rollback_ready
