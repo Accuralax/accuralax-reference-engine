@@ -4,17 +4,22 @@ from core.business_gateway import BusinessCapabilityGateway
 from .capability import resolve
 from .adapters.base import BusinessSystemAdapter
 from .credential_state import CredentialStateMatrix
+from .credentials import CredentialProvider
+from .provider_health import ProviderHealthRegistry
 from core.enterprise_integration_layer import EnterpriseIntegrationLayer
 
 class IntegrationConvergence:
     """Canonical capability -> policy gate -> durable provider execution."""
     def __init__(self, gateway: BusinessCapabilityGateway | None = None,
                  adapters: dict[str, BusinessSystemAdapter] | None = None,
-                 durable: EnterpriseIntegrationLayer | None = None):
+                 durable: EnterpriseIntegrationLayer | None = None,
+                 credentials: CredentialProvider | None = None):
         self.gateway = gateway or BusinessCapabilityGateway()
         self.adapters = adapters or {}
         self.durable = durable or EnterpriseIntegrationLayer()
-        self.credential_states = None
+        self.credentials = credentials or CredentialProvider()
+        self.credential_states = CredentialStateMatrix(self.credentials)
+        self.provider_health = ProviderHealthRegistry(self.credentials, self.adapters)
         for system, adapter in self.adapters.items():
             self.durable.register_connector(
                 system, lambda action, payload, job, a=adapter: _adapter_call(a, action, payload)
