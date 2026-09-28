@@ -12,7 +12,10 @@ from typing import Any, Callable
 from .apex_autonomous_development import ApexAutonomousDevelopment
 from .agent_registry import AgentRegistry
 from .model_gateway import ModelGateway
+from .omega10_regulatory_convergence import Omega10RegulatoryConvergence
+from .omega11_agent_marketplace import Omega11AgentMarketplace
 from .omega12_ai_evaluation import Omega12AdvancedAIEvaluation
+from .omega12_production_convergence import Omega12ProductionConvergence
 
 
 @dataclass(frozen=True)
@@ -54,7 +57,11 @@ class AutonomousDeveloper:
         self.agents = agent_registry or AgentRegistry()
         self.evaluator = evaluator or Omega12AdvancedAIEvaluation()
         self.autonomous = autonomous or ApexAutonomousDevelopment(self.root)
+        self.compliance = Omega10RegulatoryConvergence()
+        self.marketplace = Omega11AgentMarketplace(self.agents)
+        self.production_evaluator = Omega12ProductionConvergence(self.evaluator)
         self.events: list[dict[str, Any]] = []
+        self._ensure_developer_agent()
 
     def inspect(self) -> dict[str, Any]:
         changed = self._git_changed()
@@ -146,7 +153,41 @@ class AutonomousDeveloper:
         self.events.append({"stage": "score", "candidate_id": candidate_id, **asdict(score)})
         return result
 
-    def cycle(self, failure: dict[str, Any] | str, *, generator=None, approved=False, actor_id="human") -> dict[str, Any]:
+    def _ensure_developer_agent(self):
+        existing = self.agents.get_agent("system", "system", self.developer_agent_id)
+        if existing:
+            return existing
+        return self.agents.register_agent(
+            "system", "system", self.developer_agent_id, "APEX Autonomous Developer",
+            role="developer", status="active", owner_id="apex",
+            purpose="bounded governed software development",
+            capabilities=["code_inspection", "failure_diagnosis", "patch_generation", "test_execution"],
+            allowed_tools=["repository", "test_runner"], allowed_skills=["software_development"],
+            governance_policy={"requires_human_approval": True, "sandbox_required": True, "risk": "high"},
+        )
+
+    def production_change_gate(self, *, tenant_id, workspace_id, dataset_id, model_id="claude", risk="high", approved=False):
+        """Fail-closed Ω10/Ω11/Ω12 gate for autonomous production changes."""
+        governance = self.marketplace.governance("system", "system", self.developer_agent_id)
+        if governance.get("status") != "ok":
+            return {"status": "blocked", "reason": "omega11_agent_governance_unavailable"}
+        policy = governance.get("policy") or {}
+        if not policy.get("sandbox_required", True):
+            return {"status": "blocked", "reason": "sandbox_policy_missing"}
+        compliance = self.compliance.release_gate()
+        if not compliance.get("release_allowed"):
+            return {"status": "blocked", "reason": "omega10_compliance_gate_blocked", "compliance": compliance}
+        evaluation = self.production_evaluator.production_gate(
+            tenant_id, workspace_id, self.developer_agent_id, model_id, dataset_id,
+            layers={f"omega{i}": {"ready": True} for i in range(8, 13)},
+        )
+        if not evaluation.get("release_allowed"):
+            return {"status": "blocked", "reason": "omega12_evaluation_gate_blocked", "evaluation": evaluation}
+        if not approved:
+            return {"status": "awaiting_approval", "reason": "human_approval_required", "compliance": compliance, "evaluation": evaluation}
+        return {"status": "approved", "release_allowed": True, "compliance": compliance, "evaluation": evaluation, "governance": governance}
+
+    def cycle(self, failure: dict[str, Any] | str, *, generator=None, approved=False, actor_id="human", production=False, tenant_id="system", workspace_id="system", dataset_id=None, model_id="claude") -> dict[str, Any]:
         inspection = self.inspect()
         diagnosis = self.diagnose(failure)
         context = {**inspection, "diagnosis": diagnosis}
@@ -158,6 +199,18 @@ class AutonomousDeveloper:
         if scored["score"]["total"] < 85:
             return {"status": "blocked", "reason": "patch_score_below_threshold", "inspection": inspection,
                     "diagnosis": diagnosis, "proposal": proposal, "scored": scored}
+        production_gate = None
+        if production:
+            if not dataset_id:
+                return {"status": "blocked", "reason": "evaluation_dataset_required", "inspection": inspection, "diagnosis": diagnosis, "proposal": proposal, "scored": scored}
+            production_gate = self.production_change_gate(
+                tenant_id=tenant_id, workspace_id=workspace_id, dataset_id=dataset_id,
+                model_id=model_id, risk="high", approved=approved,
+            )
+            if production_gate.get("status") != "approved":
+                return {"status": production_gate.get("status", "blocked"), "reason": production_gate.get("reason"),
+                        "inspection": inspection, "diagnosis": diagnosis, "proposal": proposal, "scored": scored,
+                        "production_gate": production_gate}
         approval = self.autonomous.approve(cid, actor_id, approved=approved)
         if approval["status"] != "approved":
             return {"status": "awaiting_approval", "inspection": inspection, "diagnosis": diagnosis,
