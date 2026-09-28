@@ -3,6 +3,7 @@ from typing import Any
 from core.business_gateway import BusinessCapabilityGateway
 from .capability import resolve
 from .adapters.base import BusinessSystemAdapter
+from .credential_state import CredentialStateMatrix
 from core.enterprise_integration_layer import EnterpriseIntegrationLayer
 
 class IntegrationConvergence:
@@ -13,6 +14,7 @@ class IntegrationConvergence:
         self.gateway = gateway or BusinessCapabilityGateway()
         self.adapters = adapters or {}
         self.durable = durable or EnterpriseIntegrationLayer()
+        self.credential_states = None
         for system, adapter in self.adapters.items():
             self.durable.register_connector(
                 system, lambda action, payload, job, a=adapter: _adapter_call(a, action, payload)

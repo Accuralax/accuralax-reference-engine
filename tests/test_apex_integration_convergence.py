@@ -63,3 +63,21 @@ def test_contract_matrix_is_provider_neutral():
     from integrations.contract_matrix import matrix
     rows=matrix()
     assert rows and any(r["capability"]=="crm.contact.search" for r in rows)
+
+
+def test_credential_state_matrix_never_exposes_secret(tmp_path, monkeypatch):
+    from integrations.credential_state import CredentialState, CredentialStateMatrix
+    from integrations.credentials import CredentialProvider
+    monkeypatch.setenv("HUBSPOT_ACCESS_TOKEN","secret-not-for-agents")
+    status=CredentialStateMatrix(CredentialProvider()).check("hubspot")
+    assert status.state == CredentialState.AVAILABLE
+    assert "secret-not-for-agents" not in str(status)
+
+
+def test_response_normalization_retryability():
+    from integrations.response_normalizer import normalize
+    ok=normalize("make", {"ok":True,"execution_id":"m1"})
+    retry=normalize("hubspot", {"ok":False,"error":"temporary timeout"})
+    assert ok.status=="completed"
+    assert retry.retryable is True
+    assert retry.error_code=="temporary_timeout"
