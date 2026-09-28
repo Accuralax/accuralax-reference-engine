@@ -13,9 +13,15 @@ class OrchestrationPlane:
             c.execute('CREATE TABLE IF NOT EXISTS runs(run_id TEXT PRIMARY KEY,tenant_id TEXT NOT NULL,workspace_id TEXT NOT NULL,run_type TEXT NOT NULL,status TEXT NOT NULL,requested_by TEXT NOT NULL,correlation_id TEXT NOT NULL,trace_id TEXT NOT NULL,input_json TEXT NOT NULL,result_json TEXT,reason TEXT,created_at TEXT NOT NULL,updated_at TEXT NOT NULL,UNIQUE(tenant_id,workspace_id,correlation_id))')
     @contextmanager
     def _db(self):
-        c=sqlite3.connect(self.db_path); c.row_factory=sqlite3.Row
-        try: yield c; c.commit()
-        finally: c.close()
+        c=sqlite3.connect(self.db_path, timeout=15.0); c.execute("PRAGMA busy_timeout=15000"); c.row_factory=sqlite3.Row
+        try:
+            yield c
+            c.commit()
+        except Exception:
+            c.rollback()
+            raise
+        finally:
+            c.close()
     def create(self, tenant_id, workspace_id, run_type, payload=None, requested_by='system', correlation_id=None, trace_id=None):
         if not tenant_id or not workspace_id: raise ValueError('tenant_id_and_workspace_id_required')
         correlation_id=correlation_id or 'CORR-'+uuid.uuid4().hex[:12].upper(); trace_id=trace_id or 'TRACE-'+uuid.uuid4().hex[:12].upper()

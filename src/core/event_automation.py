@@ -15,7 +15,8 @@ class EventAutomation:
             c.execute("CREATE TABLE IF NOT EXISTS dispatches(dispatch_id TEXT PRIMARY KEY,route_id TEXT,tenant_id TEXT,workspace_id TEXT,event_id TEXT,status TEXT,actions TEXT,result TEXT,created_at TEXT)")
     @contextmanager
     def db(self):
-        c=sqlite3.connect(self.db_path)
+        c=sqlite3.connect(self.db_path, timeout=15.0)
+        c.execute("PRAGMA busy_timeout=15000")
         try:
             yield c
             c.commit()
@@ -41,6 +42,11 @@ class EventAutomation:
         out=dict(zip(("route_id","event_type","name","actions","active","created_at","updated_at"),r)); out["actions"]=json.loads(out["actions"]); return out
     def dispatch(self,t,w,event_id,event_type,payload,handlers=None):
         t,w=self.scope(t,w)
+        if not event_id: raise ValueError("event_id_required")
+        with self.db() as c:
+            prior=c.execute("SELECT status,result FROM dispatches WHERE tenant_id=? AND workspace_id=? AND event_id=? ORDER BY created_at DESC LIMIT 1",(t,w,str(event_id))).fetchone()
+        if prior:
+            return {"status":prior[0],"event_id":event_id,"idempotent":True,"actions":json.loads(prior[1] or "[]")}
         with self.db() as c: routes=c.execute("SELECT route_id,actions FROM routes WHERE tenant_id=? AND workspace_id=? AND event_type=? AND active=1",(t,w,event_type)).fetchall()
         if not routes:return {"status":"no_route","event_id":event_id,"actions":[]}
         route_results=[]

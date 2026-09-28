@@ -55,7 +55,7 @@ class HealthEngine:
         return HealthCheck("configuration", "pass" if not errors else "fail", "YAML configuration valid" if not errors else "Configuration errors detected", {"errors": errors})
 
     def _ledger_check(self) -> HealthCheck:
-        from integrations.durable_ledger import SQLiteExecutionLedger
+        from src.integrations.durable_ledger import SQLiteExecutionLedger
         ledger = SQLiteExecutionLedger(self.root / "data" / "executions.sqlite3")
         return HealthCheck("execution_ledger", "pass", "Execution ledger accessible", {"records": ledger.count(), "path": str(ledger.path)})
 
