@@ -1,0 +1,59 @@
+id: CFS-ENTERPRISE-DATA-FABRIC
+version: "1.0"
+
+architecture:
+  model: governed_enterprise_data_intelligence
+  layers:
+    - sources
+    - ingestion
+    - validation
+    - transformation
+    - storage
+    - semantic
+    - metrics
+    - analytics
+    - intelligence
+    - bi
+    - executive
+  lineage_required: true
+  provenance_required: true
+
+sources:
+  internal: [application, database, crm, finance, lms, projects, agents]
+  external: [api, website, partner, research, regulation]
+
+quality:
+  dimensions: [completeness, accuracy, consistency, validity, uniqueness, timeliness]
+  pass_threshold: 0.95
+  warning_threshold: 0.80
+  failed_data_requires_review: true
+
+semantic:
+  metric_definition_required: true
+  owner_required: true
+  source_required: true
+  calculation_version_required: true
+  conflicting_definitions_require_review: true
+
+intelligence:
+  capabilities:
+    - trend_detection
+    - anomaly_detection
+    - forecasting
+    - segmentation
+    - root_cause_analysis
+    - confidence_scoring
+  stale_data_must_be_flagged: true
+
+governance:
+  row_level_access: true
+  pii_minimisation: true
+  sensitive_exports_require_approval: true
+  executive_metrics_require_approval: true
+  credentials_never_stored: true
+
+agent_access:
+  read_by_default: true
+  write_requires_policy: true
+  publish_requires_approval: true
+  generated_insights_require_provenance: true

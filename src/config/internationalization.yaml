@@ -1,0 +1,36 @@
+schema:
+  id: CFS-INTERNATIONALIZATION
+  version: "1.0"
+  purpose: global_auto_localization
+resolution:
+  priority: [user_profile, organisation_profile, browser_locale, safe_default]
+  timezone_priority: [user_profile, organisation_profile, browser_iana_timezone, safe_default]
+  never_infer_identity_from_ip: true
+  user_can_override: true
+localization:
+  language: true
+  locale: true
+  currency: true
+  timezone: true
+  date_format: true
+  time_format: true
+  number_format: true
+  decimal_separator: true
+  thousands_separator: true
+  measurement_system: true
+  text_direction: true
+address:
+  country_specific_schema: true
+  postal_code_label: true
+  province_state_region_label: true
+  field_order: true
+business:
+  currency_display: true
+  currency_conversion_requires_rate_source: true
+  tax_jurisdiction_must_be_explicit: true
+  legal_address_is_not_derived_from_browser: true
+  working_hours_are_timezone_aware: true
+  audit_timestamps_are_utc: true
+security:
+  credentials_never_exposed: true
+  locale_is_presentation_context_not_identity_proof: true

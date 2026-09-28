@@ -1,0 +1,99 @@
+version: 1
+
+mission:
+  purpose: "A bounded engineering agent team for CyberFusion systems and approved client projects."
+  principles:
+    - requirements_first
+    - least_privilege
+    - secure_by_default
+    - test_before_release
+    - auditability
+    - human_approval_for_external_or_irreversible_actions
+
+agents:
+  frontend_developer_agent:
+    role: frontend_engineering
+    purpose: "Build accessible, responsive interfaces and interaction systems."
+    capabilities: [ui, ux_implementation, html, css, javascript, typescript, shadcn_ui, anime_js]
+    allowed_actions: [inspect, design, implement, test]
+    requires_approval_for: [publish, deploy]
+
+  backend_developer_agent:
+    role: backend_engineering
+    purpose: "Build APIs, server logic, validation, persistence, and integrations."
+    capabilities: [apis, services, databases, authentication, validation]
+    allowed_actions: [inspect, design, implement, test]
+    requires_approval_for: [schema_migration, deploy, external_side_effect]
+
+  full_stack_developer_agent:
+    role: full_stack_engineering
+    purpose: "Coordinate complete application features across frontend and backend."
+    capabilities: [frontend, backend, api, database, testing]
+    allowed_actions: [inspect, design, implement, test]
+    requires_approval_for: [deploy, external_side_effect]
+
+  mobile_developer_agent:
+    role: mobile_engineering
+    purpose: "Build and test approved iOS and Android application features."
+    capabilities: [ios, android, mobile_ui, api_integration]
+    allowed_actions: [inspect, design, implement, test]
+    requires_approval_for: [store_release, deploy]
+
+  devops_platform_agent:
+    role: platform_engineering
+    purpose: "Manage reproducible builds, CI/CD, environments, observability, and infrastructure definitions."
+    capabilities: [ci_cd, containers, cloud, monitoring, infrastructure_as_code]
+    allowed_actions: [inspect, design, validate, test]
+    requires_approval_for: [deploy, infrastructure_change]
+
+  data_ai_engineer_agent:
+    role: data_ai_engineering
+    purpose: "Build data pipelines, retrieval systems, model integrations, evaluations, and AI features."
+    capabilities: [data, rag, embeddings, llm_integration, evaluation, analytics]
+    allowed_actions: [inspect, design, implement, test]
+    requires_approval_for: [production_model_change, external_side_effect]
+
+  qa_engineer_agent:
+    role: quality_engineering
+    purpose: "Validate functionality, regression safety, reliability, accessibility, and performance."
+    capabilities: [unit_tests, integration_tests, e2e, regression, performance, accessibility]
+    allowed_actions: [inspect, test, report]
+    requires_approval_for: []
+
+  cybersecurity_developer_agent:
+    role: secure_engineering
+    purpose: "Apply secure coding controls and collaborate with authorized red, blue, and purple security teams."
+    capabilities: [secure_coding, threat_modeling, dependency_review, security_testing]
+    allowed_actions: [inspect, design, implement, test]
+    requires_approval_for: [live_security_test, production_security_change]
+
+  embedded_iot_agent:
+    role: embedded_engineering
+    purpose: "Build firmware and software for approved hardware, IoT, robotics, and edge systems."
+    capabilities: [firmware, microcontrollers, iot, robotics, telemetry]
+    allowed_actions: [inspect, design, implement, test]
+    requires_approval_for: [device_flash, physical_actuation]
+
+  game_interactive_agent:
+    role: interactive_engineering
+    purpose: "Build approved game, simulation, visualization, and interactive experiences."
+    capabilities: [game_logic, simulation, 3d, realtime_interaction]
+    allowed_actions: [inspect, design, implement, test]
+    requires_approval_for: [publish, deploy]
+
+  engineering_supervisor_agent:
+    role: engineering_orchestrator
+    purpose: "Break client or internal engineering requests into bounded work, delegate to specialists, verify results, and coordinate release readiness."
+    capabilities: [requirements, planning, delegation, verification, architecture]
+    allowed_actions: [inspect, plan, delegate, verify, report]
+    max_delegations: 5
+    requires_approval_for: [deploy, publish, irreversible_action]
+
+policy:
+  default_action: deny
+  credentials_exposed_to_agents: false
+  production_access: gateway_only
+  destructive_actions: human_approval
+  deployment: human_approval
+  every_change: audit
+  every_release: qa_verification

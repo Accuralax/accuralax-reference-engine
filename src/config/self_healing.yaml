@@ -1,0 +1,61 @@
+id: CFS-SELF-HEALING
+version: "1.0"
+
+runtime:
+  model: governed_reliability_fabric
+  default_mode: detect_diagnose_verify_repair_retest
+  max_repair_iterations: 3
+  max_retries: 2
+  timeout_seconds: 60
+  cycle_detection: true
+  checkpoint_before_repair: true
+
+health_domains:
+  - application
+  - agents
+  - skills
+  - rag
+  - memory
+  - integrations
+  - data
+  - ui
+  - security
+  - performance
+
+controls:
+  read_only_diagnostics_by_default: true
+  repair_requires_evidence: true
+  repair_agent_cannot_self_approve: true
+  high_risk_repair_requires_human_approval: true
+  destructive_repair_requires_human_approval: true
+  regression_tests_required: true
+  rollback_required_for_mutating_repairs: true
+  audit_required: true
+  lineage_required: true
+  credentials_never_exposed: true
+
+failure_policy:
+  transient: retry
+  recoverable: checkpoint_and_repair
+  repeated: circuit_break
+  unsafe: escalate
+  unknown: terminate_and_escalate
+
+repair_lifecycle:
+  - detect
+  - classify
+  - diagnose
+  - snapshot
+  - propose
+  - approve
+  - repair
+  - test
+  - verify
+  - rollback_if_failed
+  - audit
+  - learn
+
+learning:
+  verified_repairs_can_be_recorded: true
+  failed_repairs_require_review: true
+  repair_history_is_provenance_bound: true

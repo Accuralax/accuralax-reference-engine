@@ -1,0 +1,62 @@
+governance:
+  id: CFS-GOVERNANCE
+  version: "1.0"
+  default_decision: deny
+  principles: [lawfulness, fairness, transparency, accountability, human_oversight]
+
+policy_types:
+  internal_policy: [security, finance, operations, hr, quality]
+  regulation: [privacy, tax, financial, industry, technology]
+  ethics: [responsible_ai, fairness, safety, conflicts_of_interest]
+  terms_conditions: [customer, service, platform, partner]
+  privacy: [consent, purpose, minimisation, retention, rights]
+
+rules:
+  credentials: {decision: deny, human_override: false}
+  destructive_actions: {decision: require_approval, evidence: required}
+  financial_transactions: {decision: require_approval, audit: required}
+  external_side_effects: {decision: policy_check, audit: required}
+  project_activation: {decision: require_approval, audit: required}
+  service_activation: {decision: require_approval, audit: required}
+  product_activation: {decision: require_approval, audit: required}
+  pricing_change: {decision: require_approval, audit: required}
+  supplier_onboarding: {decision: require_approval, audit: required}
+  purchase_approval: {decision: require_approval, audit: required}
+  purchase_order: {decision: require_approval, audit: required}
+  contract_commitments: {decision: require_approval, audit: required}
+  quality_release: {decision: require_approval, audit: required}
+  finding_closure: {decision: require_approval, audit: required}
+  standard_change: {decision: require_approval, audit: required}
+  leave_approval: {decision: require_approval, audit: required}
+  sensitive_hr_decision: {decision: require_human_review, audit: required}
+  employment_action: {decision: require_human_review, audit: required}
+  compensation_change: {decision: require_approval, audit: required}
+  disciplinary_action: {decision: require_human_review, audit: required}
+  strategic_decision: {decision: require_approval, audit: required}
+  financial_commitment: {decision: require_approval, audit: required}
+  legal_action: {decision: require_human_review, audit: required}
+  policy_change: {decision: require_approval, audit: required}
+  external_commitment: {decision: require_approval, audit: required}
+  policy_exception: {decision: require_human_review, audit: required}
+  regulatory_decision: {decision: require_human_review, audit: required}
+  legal_interpretation: {decision: require_human_review, audit: required}
+  refund_transactions: {decision: require_approval, audit: required}
+  budget_change: {decision: require_approval, audit: required}
+  metric_definition_change: {decision: require_approval, audit: required}
+  dashboard_publication: {decision: require_approval, audit: required}
+  executive_metric_publish: {decision: require_approval, audit: required}
+  sensitive_export: {decision: require_approval, audit: required}
+  public_dashboard: {decision: require_approval, audit: required}
+  authority_change: {decision: require_approval, audit: required}
+  disputed_source_resolution: {decision: require_human_review, audit: required}
+  sensitive_collection_access: {decision: require_approval, audit: required}
+  sensitive_data: {decision: policy_check, provenance: required}
+  ai_high_impact_decisions: {decision: require_human_review, audit: required}
+  policy_conflict: {decision: deny, escalation: governance}
+
+control_lifecycle: [identify, assess, design, approve, enforce, test, monitor, remediate, retire]
+
+ethics:
+  human_oversight_required: true
+  explainability_required_for_high_impact: true
+  prohibited: [deception, credential_exfiltration, unauthorized_access, unsafe_autonomy]

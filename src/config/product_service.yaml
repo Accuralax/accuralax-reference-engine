@@ -1,0 +1,24 @@
+id: CFS-PRODUCT-SERVICE
+version: "1.0"
+
+product_service:
+  entities: [product, service, offering, pricing_plan, subscription, sla, release, feature, service_request]
+  lifecycle:
+    product: [idea, development, beta, active, deprecated, retired]
+    service: [design, pilot, active, paused, retired]
+    release: [planned, testing, approved, released, rolled_back]
+    subscription: [trial, active, paused, cancelled, expired]
+  controls:
+    pricing_changes_require_approval: true
+    service_activation_requires_approval: true
+    contractual_commitments_require_approval: true
+    external_side_effects_require_policy_check: true
+    audit_required: true
+    credentials_never_exposed: true
+  intelligence:
+    dimensions: [adoption, revenue, quality, support, sla, retention, profitability]
+    confidence_required: true
+  ai_agent:
+    role: governed_product_service_assistant
+    may: [classify, summarise, draft_catalogue, analyse_usage, identify_quality_issues, recommend_next_step]
+    must_request_approval_for: [pricing_change, service_activation, contractual_commitment, retirement]

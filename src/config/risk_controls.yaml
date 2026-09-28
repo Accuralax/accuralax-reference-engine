@@ -1,0 +1,47 @@
+risk_management:
+  id: CFS-RISK-CONTROLS
+  version: "1.0"
+  default_risk: medium
+  scoring:
+    likelihood: [rare, unlikely, possible, likely, almost_certain]
+    impact: [minor, moderate, major, severe, critical]
+  treatment: [accept, mitigate, transfer, avoid, escalate]
+
+risk_categories:
+  - security
+  - privacy
+  - financial
+  - legal
+  - operational
+  - technology
+  - ai
+  - reputation
+  - third_party
+  - continuity
+
+controls:
+  - id: CTRL-IDENTITY
+    category: security
+    objective: verified_identity_and_authorized_access
+    test_frequency: continuous
+  - id: CTRL-PRIVACY
+    category: privacy
+    objective: purpose_limitation_and_data_minimisation
+    test_frequency: periodic
+  - id: CTRL-FINANCE
+    category: financial
+    objective: approval_and_reconciliation
+    test_frequency: continuous
+  - id: CTRL-AI-OVERSIGHT
+    category: ai
+    objective: bounded_human_oversight
+    test_frequency: continuous
+  - id: CTRL-AUDIT
+    category: governance
+    objective: traceable_evidence_for_sensitive_actions
+    test_frequency: continuous
+
+findings:
+  statuses: [open, accepted, mitigated, resolved, escalated]
+  evidence_required: true
+  remediation_required: true

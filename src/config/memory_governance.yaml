@@ -1,0 +1,37 @@
+id: CFS-MEMORY-GOVERNANCE
+version: "1.0"
+
+memory:
+  types: [working, episodic, semantic, procedural]
+  states: [candidate, validated, consolidated, stale, disputed, archived]
+  lifecycle: [capture, validate, score, consolidate, retrieve, decay, archive]
+  controls:
+    provenance_required: true
+    source_hash_required: true
+    confidence_required: true
+    scope_required: true
+    policy_precedence: true
+    credentials_never_stored: true
+    sensitive_memory_requires_review: true
+    stale_memory_must_be_flagged: true
+    disputed_memory_must_be_flagged: true
+    learned_procedures_require_verification: true
+  retrieval:
+    semantic: true
+    keyword: true
+    recency: true
+    importance: true
+    confidence: true
+    domain_scope: true
+  consolidation:
+    duplicate_detection: true
+    conflict_detection: true
+    promote_only_after_validation: true
+    generated_content_not_authoritative: true
+  decay:
+    enabled: true
+    stale_after_days: 90
+  audit:
+    memory_writes: true
+    memory_reads: false
+    governance_decisions: true

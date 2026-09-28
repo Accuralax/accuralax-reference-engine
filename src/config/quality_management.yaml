@@ -1,0 +1,27 @@
+id: CFS-QUALITY-MANAGEMENT
+version: "1.0"
+
+quality_management:
+  entities: [quality_standard, inspection, test, finding, nonconformity, capa, audit, evidence, quality_metric, supplier_quality]
+  lifecycle:
+    finding: [open, under_review, accepted, corrected, verified, closed]
+    nonconformity: [reported, contained, corrective_action, verification, closed]
+    capa: [draft, approved, in_progress, effectiveness_review, closed]
+    audit: [planned, scheduled, in_progress, reported, closed]
+  controls:
+    evidence_required: true
+    inspection_traceability_required: true
+    corrective_action_requires_owner: true
+    effectiveness_verification_required: true
+    audit_findings_require_follow_up: true
+    supplier_quality_review_required: true
+    high_impact_quality_decisions_require_human_review: true
+    audit_required: true
+    credentials_never_exposed: true
+  intelligence:
+    dimensions: [defect_rate, first_pass_yield, rework, customer_quality, supplier_quality, audit_findings, capa_effectiveness, trend]
+    confidence_required: true
+  ai_agent:
+    role: governed_quality_assistant
+    may: [classify, summarise, analyse_trends, identify_nonconformity, draft_capa, prepare_audit_summary, recommend_next_step]
+    must_request_approval_for: [quality_release, finding_closure, high_impact_decision, standard_change]

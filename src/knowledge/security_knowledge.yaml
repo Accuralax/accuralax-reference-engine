@@ -1,0 +1,37 @@
+version: 1
+
+documents:
+  - id: sec-identity-001
+    domain: identity
+    title: "Identity and Access Baseline"
+    tags: [identity, access, least-privilege, authentication]
+    content: "Review privileged access, stale accounts, excessive permissions, strong authentication coverage, and access-review evidence."
+
+  - id: sec-endpoint-001
+    domain: endpoint
+    title: "Endpoint Protection Baseline"
+    tags: [endpoint, hardening, detection, recovery]
+    content: "Validate supported software, secure configuration baselines, endpoint protection, logging, detection coverage, and recovery procedures."
+
+  - id: sec-web-001
+    domain: web
+    title: "Web Application Protection Baseline"
+    tags: [web, application, configuration, detection]
+    content: "Review authentication, authorization, input handling, secure configuration, dependency management, logging, and monitoring."
+
+  - id: sec-data-001
+    domain: data
+    title: "Data Protection Baseline"
+    tags: [data, classification, privacy, audit]
+    content: "Identify sensitive data, define access controls, retention rules, monitoring, audit evidence, backup, and recovery requirements."
+
+  - id: sec-incident-001
+    domain: incident
+    title: "Incident Response Baseline"
+    tags: [incident, response, containment, recovery]
+    content: "Triage scope and impact, preserve evidence appropriately, contain safely, recover from trusted state, verify controls, and document lessons learned."
+
+retrieval:
+  max_results: 3
+  minimum_score: 1
+  source_type: local_approved

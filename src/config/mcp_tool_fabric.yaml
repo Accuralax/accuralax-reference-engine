@@ -1,0 +1,53 @@
+id: CFS-MCP-TOOL-FABRIC
+version: "1.0"
+
+gateway:
+  model: governed_mcp_gateway
+  default_access: deny
+  discovery: registry_only
+  credentials_never_exposed: true
+  audit_required: true
+  lineage_required: true
+
+tool_classes:
+  read: [search, inspect, list, retrieve, query]
+  execute: [run, transform, analyze]
+  external_side_effect: [send, publish, deploy, create_external, update_external]
+  destructive: [delete, revoke, destroy, reset]
+
+controls:
+  identity_required: true
+  capability_required: true
+  scope_required: true
+  argument_validation: true
+  schema_validation: true
+  policy_check_before_execution: true
+  approval_for_external_side_effects: true
+  approval_for_destructive_actions: true
+  sandbox_high_risk_execution: true
+  timeout_required: true
+  budget_required: true
+  idempotency_required_for_retries: true
+  result_verification_required: true
+  rollback_supported: true
+
+lifecycle:
+  - discover
+  - register
+  - authorize
+  - validate
+  - policy_check
+  - approve
+  - execute
+  - verify
+  - audit
+  - reconcile
+
+servers:
+  github: governed
+  supabase: governed
+  vercel: governed
+  desktop_commander: governed
+  obsidian: planned
+  claude_code: planned
+  future: registry

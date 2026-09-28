@@ -1,0 +1,32 @@
+knowledge:
+  id: CFS-KNOWLEDGE
+  version: "1.0"
+  default_trust: unverified
+  provenance_required: true
+  citations_required_for_external_claims: true
+  credentials_never_indexed: true
+
+source_types: [document, website, api, research, regulation, policy, database, user_input]
+trust_levels: [unverified, low, medium, high, authoritative]
+
+pipeline: [ingest, validate, classify, extract, chunk, embed, index, retrieve, rerank, verify, cite]
+
+retrieval:
+  hybrid: true
+  semantic_search: true
+  keyword_search: true
+  reranking: true
+  freshness_check: true
+  conflict_detection: true
+  minimum_evidence: 1
+
+knowledge_states: [received, validated, indexed, stale, disputed, archived]
+
+controls:
+  source_identity_required: true
+  source_timestamp_required: true
+  content_hash_required: true
+  provenance_chain_required: true
+  stale_content_must_be_flagged: true
+  conflicting_sources_require_review: true
+  generated_content_cannot_become_authoritative_automatically: true

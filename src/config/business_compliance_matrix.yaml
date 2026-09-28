@@ -1,0 +1,62 @@
+id: CFS-BUSINESS-COMPLIANCE-MATRIX
+version: "1.0"
+
+framework:
+  model: governed_business_compliance_matrix
+  default_status: unknown
+  evidence_required: true
+  owner_required: true
+  review_date_required: true
+  provenance_required: true
+  audit_required: true
+  credentials_never_exposed: true
+
+domains:
+  legal_entity:
+    controls: [registration, ownership_records, statutory_records, beneficial_ownership]
+  tax:
+    controls: [income_tax, vat, paye, withholding_tax, returns, payments]
+  employment:
+    controls: [employment_records, payroll, leave, workplace_policies, training]
+  health_safety:
+    controls: [risk_assessment, incidents, inspections, emergency_controls]
+  privacy:
+    controls: [lawful_processing, consent, minimisation, retention, data_subject_rights]
+  information_security:
+    controls: [access_control, asset_management, vulnerability_management, incident_response, backups]
+  finance:
+    controls: [bookkeeping, reconciliations, approvals, financial_reporting, segregation_of_duties]
+  procurement:
+    controls: [supplier_due_diligence, purchasing, contracts, conflicts_of_interest]
+  contracts:
+    controls: [review, approval, obligations, renewals, termination]
+  governance:
+    controls: [policies, approvals, board_records, conflicts, delegated_authority]
+  quality:
+    controls: [standards, inspections, findings, capa, evidence]
+  industry:
+    controls: [licences, sector_requirements, standards, regulator_obligations]
+
+status:
+  values: [compliant, partial, non_compliant, not_applicable, unknown, overdue]
+  evidence_confidence: [low, medium, high]
+
+matrix:
+  fields: [control_id, domain, requirement, owner, status, evidence, source, due_date, review_date, risk_id, remediation, confidence]
+  gap_detection: true
+  overdue_detection: true
+  evidence_gap_detection: true
+  conflicting_evidence_requires_review: true
+
+reporting:
+  outputs: [compliance_matrix, gap_report, risk_report, executive_brief, remediation_plan, audit_pack]
+  require_source_provenance: true
+  require_confidence: true
+  require_generated_content_label: true
+  approval_before_external_publication: true
+
+ai_agent:
+  role: governed_compliance_risk_report_agent
+  may: [map_controls, assess_gaps, summarise_evidence, score_risk, draft_reports, propose_remediation]
+  must_not: [invent_compliance, provide_final_legal_interpretation, self_approve, alter_authoritative_records]
+  human_review: [legal_interpretation, regulatory_decision, high_impact_compliance_decision, external_publication]

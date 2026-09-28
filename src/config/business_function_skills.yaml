@@ -1,0 +1,109 @@
+version: 1
+
+mission:
+  purpose: "Bounded reusable skills for the 15 CyberFusion business-function agents."
+  principles:
+    - skill_scope_is_explicit
+    - least_privilege
+    - evidence_before_claims
+    - no_credential_access
+    - human_approval_for_high_risk_actions
+    - auditability
+
+skills:
+  analysis:
+    purpose: "Analyze approved inputs, identify patterns, constraints, risks and opportunities."
+    allowed_functions: [strategy, finance, sales_marketing, research_development, information_technology, customer_service, human_resources, governance, production, sourcing, quality_management, distribution, operations]
+    actions: [inspect, analyze, assess, report]
+
+  planning:
+    purpose: "Convert validated requirements into structured plans, milestones, dependencies and measures."
+    allowed_functions: [strategy, finance, sales_marketing, research_development, information_technology, human_resources, production, sourcing, quality_management, distribution, operations]
+    actions: [plan, design, prepare]
+
+  research:
+    purpose: "Conduct bounded research using approved sources and clearly label evidence and uncertainty."
+    allowed_functions: [strategy, sales_marketing, research_development, communications, governance, sourcing]
+    actions: [inspect, research, analyze, report]
+
+  financial_analysis:
+    purpose: "Prepare financial models, budgets, cash-flow analysis and financial reports without executing transactions."
+    allowed_functions: [finance]
+    actions: [inspect, analyze, model, report, prepare, financial_transaction]
+    human_review: true
+
+  sales_pipeline:
+    purpose: "Analyze leads, opportunities, funnel stages, offers and customer acquisition workflows."
+    allowed_functions: [sales_marketing, customer_service]
+    actions: [inspect, analyze, prepare, report]
+
+  customer_resolution:
+    purpose: "Triage customer issues, identify resolution paths and prepare escalations."
+    allowed_functions: [customer_service]
+    actions: [inspect, triage, respond, document, escalate]
+
+  people_operations:
+    purpose: "Support workforce planning, recruitment preparation, onboarding and performance workflows."
+    allowed_functions: [human_resources]
+    actions: [inspect, analyze, prepare, report]
+    human_review: true
+
+  creative_design:
+    purpose: "Produce structured design concepts, requirements, prototypes and review criteria."
+    allowed_functions: [design]
+    actions: [inspect, design, prototype, test, prepare]
+
+  communications_drafting:
+    purpose: "Draft internal or external communications while separating verified facts from proposed messaging."
+    allowed_functions: [communications, sales_marketing, customer_service]
+    actions: [inspect, draft, prepare, analyze]
+    human_review: true
+
+  governance_review:
+    purpose: "Review policies, accountability, controls, decision rights, risks and evidence."
+    allowed_functions: [governance, finance, human_resources, information_technology, quality_management]
+    actions: [inspect, assess, validate, report]
+
+  production_control:
+    purpose: "Analyze production capacity, scheduling, dependencies and quality constraints."
+    allowed_functions: [production, operations, distribution]
+    actions: [inspect, plan, validate, report]
+
+  procurement_analysis:
+    purpose: "Compare sourcing options, suppliers, requirements, cost, risk and delivery factors."
+    allowed_functions: [sourcing, distribution, production]
+    actions: [inspect, analyze, compare, prepare, report, procure]
+    human_review: true
+
+  quality_assurance:
+    purpose: "Validate requirements, test evidence, defects, acceptance criteria and release readiness."
+    allowed_functions: [quality_management, production, software_engineering]
+    actions: [inspect, test, validate, analyze, report]
+
+  distribution_planning:
+    purpose: "Plan fulfillment, delivery, channels, inventory and distribution constraints."
+    allowed_functions: [distribution, sourcing, production]
+    actions: [inspect, plan, validate, schedule, report]
+
+  operations_optimization:
+    purpose: "Map workflows, identify bottlenecks and prepare measurable process improvements."
+    allowed_functions: [operations, strategy, production, customer_service]
+    actions: [inspect, diagnose, analyze, plan, report]
+
+  technology_coordination:
+    purpose: "Coordinate approved IT, software, cloud, network and security requirements with technical teams."
+    allowed_functions: [information_technology]
+    actions: [inspect, diagnose, design, implement, test, report]
+    human_review: true
+
+  innovation_prototyping:
+    purpose: "Turn validated ideas into bounded experiments and prototypes."
+    allowed_functions: [research_development, strategy, design]
+    actions: [research, prototype, test, report]
+
+policy:
+  default_action: deny
+  credentials_exposed_to_agents: false
+  production_access: gateway_only
+  high_risk_actions: human_approval
+  every_skill_execution: audit

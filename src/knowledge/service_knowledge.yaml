@@ -1,0 +1,115 @@
+version: 1
+
+knowledge:
+  business_diagnostic:
+    purpose: "Assess the client's business situation, priorities, and operational gaps."
+    intake: [client_type, business_name, main_challenge, desired_outcome]
+    response_rules:
+      - "Do not invent business facts, prices, or outcomes."
+    handoff: "human_review"
+
+  strategic_plan:
+    purpose: "Scope strategic planning needs and desired business direction."
+    intake: [client_type, business_name, current_stage, goals, planning_horizon]
+    response_rules:
+      - "Do not guarantee business results."
+    handoff: "human_review"
+
+  market_research:
+    purpose: "Scope a market-research requirement."
+    intake: [business_name, market_or_product, target_customer, geography, research_question]
+    response_rules:
+      - "Separate proposed research from verified market findings."
+    handoff: "human_review"
+
+  business_registration:
+    purpose: "Help a prospective client understand the business-registration service and the information needed to assess it."
+    intake: [entity_type, proposed_name, province, business_activity]
+    response_rules:
+      - "Do not promise registration approval or turnaround time."
+      - "Confirm current requirements before quoting fees or timelines."
+    handoff: "human_review"
+
+  npo_npc_registration:
+    purpose: "Scope an NPO/NPC registration support request."
+    intake: [organisation_type, proposed_name, province, purpose_or_objectives, founding_documents]
+    response_rules:
+      - "Do not promise registration approval or turnaround time."
+      - "Verify current requirements before presenting them as current."
+    handoff: "human_review"
+
+  compliance_support:
+    purpose: "Identify the relevant compliance support area before human review."
+    intake: [organisation_type, compliance_area, current_status, deadline]
+    response_rules:
+      - "Do not provide definitive legal or tax conclusions."
+      - "Verify current rules and requirements before presenting them as current."
+    handoff: "human_review"
+
+  funding_proposal:
+    purpose: "Assess a client's funding or proposal-support need and identify the appropriate next information."
+    intake: [client_type, funding_purpose, funding_amount, deadline, existing_documents]
+    response_rules:
+      - "Do not guarantee funding approval."
+      - "Do not present outdated funding programmes as currently open."
+    handoff: "human_review"
+
+  tender_support:
+    purpose: "Scope tender-support needs and identify required tender information."
+    intake: [client_type, tender_reference, closing_date, service_or_goods, existing_documents]
+    response_rules:
+      - "Do not claim eligibility or tender status without verification."
+      - "Do not guarantee tender awards."
+    handoff: "human_review"
+
+  website:
+    purpose: "Capture website goals and requirements for a digital solution assessment."
+    intake: [business_name, website_goal, required_pages, preferred_features, domain_status]
+    response_rules:
+      - "Do not claim a domain is available without a current lookup."
+    handoff: "solution_assessment"
+
+  software_app:
+    purpose: "Scope software or application-development requirements."
+    intake: [problem_to_solve, users, key_features, platform, integrations]
+    response_rules:
+      - "Clearly distinguish a proposal or prototype from a production system."
+    handoff: "solution_assessment"
+
+  ai_automation:
+    purpose: "Identify repetitive business processes that may be suitable for AI or automation."
+    intake: [business_process, current_tools, desired_outcome, volume_or_frequency]
+    response_rules:
+      - "Do not claim an integration exists until it is verified."
+      - "Separate proposed architecture from implemented functionality."
+    handoff: "solution_assessment"
+
+  cybersecurity:
+    purpose: "Triage cybersecurity and data-protection needs without requesting secrets."
+    intake: [business_system, issue_summary, affected_scope, urgency]
+    response_rules:
+      - "Never request passwords, API keys, authentication tokens, or payment details."
+      - "Escalate suspected active incidents for human handling."
+    handoff: "human_review"
+
+  monthly_support:
+    purpose: "Understand recurring support requirements and existing systems."
+    intake: [client_status, systems, recurring_tasks, preferred_support_frequency]
+    response_rules:
+      - "Confirm scope and ownership before starting work."
+    handoff: "client_support"
+
+  existing_client_support:
+    purpose: "Identify the support need of an existing client and route it to the appropriate owner."
+    intake: [client_status, existing_service_or_project, support_issue, urgency]
+    response_rules:
+      - "Confirm existing ownership and scope before taking action."
+    handoff: "client_support"
+
+routing:
+  unknown_service:
+    response: "I need a little more information to identify the correct CyberFusion service."
+    handoff: "human_review"
+  ambiguous_request:
+    response: "Ask one focused clarification question rather than guessing."
+    handoff: "human_review"

@@ -1,0 +1,26 @@
+id: CFS-PROJECT-PORTFOLIO
+version: "1.0"
+
+project_portfolio:
+  entities: [portfolio, programme, project, task, milestone, dependency, resource, budget, risk, decision, approval]
+  lifecycle:
+    project: [draft, approved, active, blocked, completed, cancelled, archived]
+    task: [backlog, ready, in_progress, blocked, review, done, cancelled]
+    milestone: [planned, at_risk, achieved, missed]
+  controls:
+    approval_required_for_project_activation: true
+    budget_changes_require_approval: true
+    external_side_effects_require_policy_check: true
+    destructive_actions_require_explicit_approval: true
+    risk_register_required: true
+    dependency_tracking_required: true
+    audit_required: true
+    credentials_never_exposed: true
+  intelligence:
+    health_dimensions: [schedule, scope, budget, resources, risks, dependencies, quality]
+    status_labels: [green, amber, red]
+    confidence_required: true
+  ai_agent:
+    role: governed_project_assistant
+    may: [plan, decompose, summarise, identify_risks, identify_dependencies, recommend_next_step, report_status]
+    must_request_approval_for: [project_activation, budget_change, scope_change, destructive_action]

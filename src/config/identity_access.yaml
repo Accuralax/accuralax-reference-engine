@@ -1,0 +1,32 @@
+identity:
+  id: CFS-IAM
+  version: "1.0"
+  trust_model: zero_trust
+  default_access: deny
+  credential_values_exposed_to_agents: false
+
+actors:
+  human: [founder, executive, manager, operator, analyst, auditor, customer, partner]
+  machine: [agent, sub_agent, service_account, automation]
+
+roles:
+  founder: [read, approve, delegate, govern]
+  executive: [read, approve, delegate]
+  manager: [read, approve, delegate_within_scope]
+  operator: [read, execute_within_scope]
+  analyst: [read, analyse]
+  auditor: [read, audit]
+  agent: [read, execute_bounded, request_approval]
+  sub_agent: [read, execute_bounded]
+  service_account: [execute_scoped]
+
+trust_levels: [untrusted, verified, trusted, privileged]
+
+controls:
+  least_privilege: true
+  separation_of_duties: true
+  scoped_delegation: true
+  approval_authority_checked: true
+  session_expiry_required: true
+  sensitive_actions_reauthentication: true
+  credentials_never_in_context: true

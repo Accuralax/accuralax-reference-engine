@@ -1,0 +1,41 @@
+id: CFS-AGENTIC-ORCHESTRATION
+version: "1.0"
+
+orchestration:
+  model: governed_hierarchical_agentic_graph
+  backbone: langgraph
+  bounded: true
+  max_steps: 12
+  max_delegations: 5
+  cycle_detection: true
+  checkpoint_required: true
+  trace_required: true
+
+layers:
+  supervisor: [global_supervisor]
+  domain_supervisors: [business, cybersecurity, engineering, data_platform, it_operations]
+  specialists: [service_triage, cybersecurity_triage, ai_automation, digital, business_operations]
+  sub_agents: [research, verification, analysis, document, data, security]
+  skills: governed_bounded_capabilities
+  tools: mcp_gateway
+
+execution:
+  sequence: [identity, policy, safety, intake, route, retrieve, delegate, execute, verify, approve, commit, trace]
+  failure_policy: [retry_bounded, checkpoint, recover, escalate, terminate]
+  high_risk_requires_approval: true
+  destructive_requires_approval: true
+  external_side_effect_requires_policy_check: true
+  credentials_never_exposed: true
+
+delegation:
+  least_privilege: true
+  scope_inherited: true
+  child_cannot_expand_parent_scope: true
+  approval_authority_not_delegated: true
+  max_depth: 4
+
+verification:
+  required_before_completion: true
+  provenance_required: true
+  policy_compliance_required: true
+  output_safety_required: true

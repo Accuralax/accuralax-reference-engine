@@ -1,0 +1,81 @@
+version: 1
+company: CyberFusion Solutions
+
+service_areas:
+  - id: business_consulting
+    name: Business Consulting
+    keywords: [business, consulting, strategy, planning, diagnostic, operations]
+    handoff: human_review
+  - id: compliance
+    name: Compliance & Governance
+    keywords: [compliance, registration, tax, SARS, CIPC, UIF, COID, policy]
+    handoff: human_review
+  - id: digital
+    name: Digital Solutions
+    keywords: [website, digital, software, app, portal, automation]
+    handoff: solution_assessment
+  - id: ai_automation
+    name: AI & Automation
+    keywords: [AI, automation, chatbot, workflow, agent, knowledge assistant]
+    handoff: solution_assessment
+  - id: cybersecurity
+    name: Cybersecurity
+    keywords: [cybersecurity, security, cyber, data protection, privacy]
+    handoff: human_review
+  - id: funding
+    name: Funding & Proposals
+    keywords: [funding, grant, proposal, finance, tender, investor]
+    handoff: human_review
+  - id: support
+    name: Monthly & Existing Client Support
+    keywords: [support, maintenance, existing client, monthly]
+    handoff: client_support
+
+services:
+  - id: business_diagnostic
+    area: business_consulting
+    name: Business Diagnostic
+  - id: strategic_plan
+    area: business_consulting
+    name: Strategic Plan
+  - id: market_research
+    area: business_consulting
+    name: Market Research
+  - id: business_registration
+    area: compliance
+    name: Business Registration
+  - id: npo_npc_registration
+    area: compliance
+    name: NPO/NPC Registration
+  - id: compliance_support
+    area: compliance
+    name: Compliance Support
+  - id: funding_proposal
+    area: funding
+    name: Funding Proposal
+  - id: tender_support
+    area: funding
+    name: Tender Support
+  - id: website
+    area: digital
+    name: Website Development
+  - id: software_app
+    area: digital
+    name: Software & App Development
+  - id: ai_automation
+    area: ai_automation
+    name: AI & Automation
+  - id: cybersecurity
+    area: cybersecurity
+    name: Cybersecurity & Data Protection
+  - id: monthly_support
+    area: support
+    name: Monthly Support
+  - id: existing_client_support
+    area: support
+    name: Existing Client Support
+
+policy:
+  pricing_requires_current_source: true
+  legal_or_financial_advice_requires_human_review: true
+  unknown_service_requires_handoff: true

@@ -1,0 +1,37 @@
+data_platform:
+  id: CFS-DATA-INTELLIGENCE
+  version: "1.0"
+  default_quality: unknown
+  lineage_required: true
+  credentials_never_stored: true
+
+layers: [ingestion, validation, transformation, storage, semantic, metrics, analytics, bi]
+
+data_quality:
+  dimensions: [completeness, accuracy, consistency, validity, uniqueness, timeliness]
+  thresholds:
+    pass: 0.95
+    warning: 0.80
+  failed_quality_requires_review: true
+
+metrics:
+  definitions_required: true
+  owner_required: true
+  source_required: true
+  calculation_version_required: true
+
+analytics:
+  anomaly_detection: enabled
+  trend_detection: enabled
+  freshness_monitoring: enabled
+  confidence_required: true
+
+bi:
+  dashboards_require_source_lineage: true
+  executive_metrics_require_approved_definition: true
+  stale_data_must_be_flagged: true
+
+security:
+  pii_minimisation: true
+  row_level_access: true
+  sensitive_exports_require_approval: true

@@ -1,0 +1,46 @@
+document_supervisor_agent:
+  role: Document Intelligence Supervisor
+  purpose: Coordinate document requests, templates, themes, specialists, QA, approval, and export.
+  can_delegate: true
+  max_delegations: 8
+  approval_required_for: [final_release, external_publish]
+
+founder_office_agent:
+  role: Founder Office Agent
+  purpose: Executive coordination, decision briefs, board documents, founder communications, and approval routing.
+  can_delegate: true
+  max_delegations: 6
+
+proposal_agent:
+  role: Proposal Specialist
+  purpose: Draft structured proposals from verified inputs.
+business_plan_agent:
+  role: Business Plan Specialist
+  purpose: Draft business plans and strategic planning documents.
+funding_agent:
+  role: Funding Proposal Specialist
+  purpose: Prepare funding applications and evidence-led funding documents.
+tender_agent:
+  role: Tender Specialist
+  purpose: Prepare tender and procurement responses from verified requirements.
+report_agent:
+  role: Report Specialist
+  purpose: Produce structured reports with findings, evidence, and recommendations.
+policy_sop_agent:
+  role: Policy and SOP Specialist
+  purpose: Draft policies and standard operating procedures.
+training_document_agent:
+  role: Training Document Specialist
+  purpose: Produce curricula, manuals, guides, and learner materials.
+technical_documentation_agent:
+  role: Technical Documentation Specialist
+  purpose: Produce technical specifications, runbooks, architecture and API documentation.
+marketing_document_agent:
+  role: Marketing Document Specialist
+  purpose: Produce brochures, profiles, campaigns, and marketing collateral.
+presentation_agent:
+  role: Presentation Specialist
+  purpose: Structure executive and presentation-ready slide content.
+document_qa_agent:
+  role: Document QA Specialist
+  purpose: Validate structure, consistency, required fields, branding, and approval gates.

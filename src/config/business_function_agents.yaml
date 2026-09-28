@@ -1,0 +1,118 @@
+version: 1
+
+mission:
+  purpose: "Bounded AI specialist layer for the 15 core business functions."
+  principles:
+    - requirements_first
+    - evidence_before_claims
+    - least_privilege
+    - human_approval_for_high_risk_actions
+    - auditability
+    - verification_before_release
+
+agents:
+  strategy_agent:
+    function: strategy
+    capabilities: [strategy, planning, transformation, market_analysis, competitive_analysis, growth, risk_assessment]
+    allowed_actions: [inspect, analyze, design, plan, report]
+    approval_actions: [strategy_commitment, external_side_effect]
+
+  finance_agent:
+    function: finance
+    capabilities: [finance, budgeting, accounting, cash_flow, funding, financial_reporting, controls]
+    allowed_actions: [inspect, analyze, model, report, prepare]
+    approval_actions: [financial_transaction, payment, financial_decision, external_side_effect]
+
+  sales_marketing_agent:
+    function: sales_marketing
+    capabilities: [sales, marketing, branding, pricing, seo, social_media, campaigns, partnerships, crm]
+    allowed_actions: [inspect, analyze, design, draft, prepare]
+    approval_actions: [publish, campaign_launch, pricing_change, external_side_effect]
+
+  research_development_agent:
+    function: research_development
+    capabilities: [research, development, experimentation, product_discovery, innovation, market_research]
+    allowed_actions: [inspect, research, analyze, prototype, test, report]
+    approval_actions: [production_release, external_side_effect]
+
+  information_technology_agent:
+    function: information_technology
+    capabilities: [it, systems, software, hardware, networks, cloud, security]
+    allowed_actions: [inspect, diagnose, design, implement, test, report]
+    approval_actions: [production_change, deploy, external_side_effect]
+
+  customer_service_agent:
+    function: customer_service
+    capabilities: [customer_service, support, complaints, returns, communication, retention, feedback]
+    allowed_actions: [inspect, respond, triage, document, escalate]
+    approval_actions: [refund, compensation, account_change, external_side_effect]
+
+  human_resources_agent:
+    function: human_resources
+    capabilities: [hr, recruitment, onboarding, performance, workforce, learning, employee_relations, policy]
+    allowed_actions: [inspect, analyze, prepare, report, recommend]
+    approval_actions: [hire, terminate, compensation_change, disciplinary_action, external_side_effect]
+
+  design_agent:
+    function: design
+    capabilities: [design, branding, ux, ui, creative, content, visual_communication]
+    allowed_actions: [inspect, design, prototype, test, prepare]
+    approval_actions: [publish, brand_change, external_side_effect]
+
+  communications_agent:
+    function: communications
+    capabilities: [communications, public_relations, media, crisis_communication, executive_communications]
+    allowed_actions: [inspect, draft, prepare, analyze, report]
+    approval_actions: [publish, spokesperson_statement, crisis_release, external_side_effect]
+
+  governance_agent:
+    function: governance
+    capabilities: [governance, accountability, policy, controls, risk, compliance, decision_rights]
+    allowed_actions: [inspect, assess, design, validate, report]
+    approval_actions: [policy_change, governance_decision, external_side_effect]
+
+  production_agent:
+    function: production
+    capabilities: [production, manufacturing, service_delivery, capacity, scheduling, production_control]
+    allowed_actions: [inspect, plan, schedule, validate, report]
+    approval_actions: [production_change, capacity_commitment, external_side_effect]
+
+  sourcing_agent:
+    function: sourcing
+    capabilities: [sourcing, procurement, purchasing, suppliers, supply_chain, logistics, partnerships]
+    allowed_actions: [inspect, analyze, compare, prepare, report]
+    approval_actions: [purchase, supplier_commitment, contract_commitment, external_side_effect]
+
+  quality_management_agent:
+    function: quality_management
+    capabilities: [quality, qa, quality_assurance, quality_control, testing, continuous_improvement]
+    allowed_actions: [inspect, test, validate, analyze, report]
+    approval_actions: [quality_release, corrective_action, external_side_effect]
+
+  distribution_agent:
+    function: distribution
+    capabilities: [distribution, fulfillment, delivery, channels, logistics, inventory]
+    allowed_actions: [inspect, plan, validate, schedule, report]
+    approval_actions: [dispatch, channel_change, external_side_effect]
+
+  operations_agent:
+    function: operations
+    capabilities: [operations, process_management, workflow, service_operations, capacity, performance_management]
+    allowed_actions: [inspect, diagnose, plan, coordinate, validate, report]
+    approval_actions: [operational_change, production_change, external_side_effect]
+
+  business_operations_supervisor_agent:
+    function: business_operations
+    role: business_domain_orchestrator
+    capabilities: [requirements, triage, planning, delegation, coordination, verification, reporting]
+    allowed_actions: [inspect, plan, delegate, verify, report]
+    max_delegations: 3
+    approval_actions: [external_side_effect, irreversible_action, production_release]
+
+policy:
+  default_action: deny
+  credentials_exposed_to_agents: false
+  production_access: gateway_only
+  high_risk_actions: human_approval
+  every_change: audit
+  every_release: verification

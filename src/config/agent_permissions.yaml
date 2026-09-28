@@ -1,0 +1,97 @@
+version: 1
+
+agents:
+  supervisor:
+    role: orchestrator
+    allowed_skills: [safety_guard, intake, service_triage, knowledge_lookup, audit]
+    allowed_tools: []
+    can_delegate: true
+    max_delegations: 3
+
+  cybersecurity_supervisor_agent:
+    role: domain_orchestrator
+    allowed_skills: [safety_guard, intake, service_triage, knowledge_lookup, cybersecurity_triage, audit]
+    allowed_tools: []
+    can_delegate: true
+    max_delegations: 4
+
+  business_supervisor_agent:
+    role: domain_orchestrator
+    allowed_skills: [safety_guard, intake, service_triage, knowledge_lookup, audit]
+    allowed_tools: []
+    can_delegate: true
+    max_delegations: 3
+
+  service_triage_agent:
+    role: specialist
+    allowed_skills: [safety_guard, intake, service_triage, knowledge_lookup]
+    allowed_tools: []
+    can_delegate: false
+
+  cybersecurity_triage_agent:
+    role: specialist
+    allowed_skills: [safety_guard, intake, service_triage, knowledge_lookup, cybersecurity_triage]
+    allowed_tools: []
+    can_delegate: true
+    max_delegations: 2
+
+  security_red_agent:
+    role: security_validation
+    allowed_skills: [safety_guard, knowledge_lookup, cybersecurity_triage, audit]
+    allowed_tools: []
+    can_delegate: false
+    max_delegations: 0
+    requires_human_approval: true
+
+  security_blue_agent:
+    role: security_defense
+    allowed_skills: [safety_guard, knowledge_lookup, cybersecurity_triage, audit]
+    allowed_tools: []
+    can_delegate: false
+    max_delegations: 0
+
+  security_purple_agent:
+    role: security_verifier
+    allowed_skills: [safety_guard, knowledge_lookup, cybersecurity_triage, audit]
+    allowed_tools: []
+    can_delegate: false
+    max_delegations: 0
+
+  ai_automation_agent:
+    role: specialist
+    allowed_skills: [safety_guard, intake, service_triage, knowledge_lookup, proposal_scoping]
+    allowed_tools: []
+    can_delegate: true
+    max_delegations: 2
+
+  digital_agent:
+    role: specialist
+    allowed_skills: [safety_guard, intake, service_triage, knowledge_lookup, proposal_scoping]
+    allowed_tools: []
+    can_delegate: true
+    max_delegations: 2
+
+  business_operations_agent:
+    role: specialist
+    allowed_skills: [safety_guard, intake, service_triage, knowledge_lookup]
+    allowed_tools: []
+    can_delegate: false
+
+  verifier_agent:
+    role: verifier
+    allowed_skills: [safety_guard, knowledge_lookup, audit]
+    allowed_tools: []
+    can_delegate: false
+
+  repair_agent:
+    role: repair
+    allowed_skills: [safety_guard, audit]
+    allowed_tools: []
+    can_delegate: false
+    requires_human_approval: true
+
+policy:
+  default_tool_access: deny
+  delegation_requires_scope: true
+  repair_requires_human_approval: true
+  credentials_never_exposed_to_agents: true

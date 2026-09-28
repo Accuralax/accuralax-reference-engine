@@ -1,0 +1,31 @@
+finance:
+  id: CFS-FINANCE
+  version: "1.0"
+  accounting_basis: configurable
+  default_currency: ZAR
+  credentials_never_exposed: true
+
+entities: [account, customer, vendor, invoice, bill, transaction, payment, refund, ledger_entry, reconciliation]
+
+controls:
+  double_entry_required: true
+  immutable_ledger: true
+  invoice_number_unique: true
+  payment_idempotency_required: true
+  reconciliation_required: true
+  segregation_of_duties: true
+  payment_approval_required: true
+  refunds_require_approval: true
+  sensitive_exports_require_approval: true
+
+invoice_states: [draft, issued, partially_paid, paid, overdue, void]
+payment_states: [pending, authorized, captured, failed, refunded, reversed]
+
+ledger:
+  balanced_entries_required: true
+  source_provenance_required: true
+  audit_event_required: true
+
+reconciliation:
+  states: [unreconciled, matched, exception, resolved]
+  exception_requires_review: true

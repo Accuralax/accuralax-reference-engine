@@ -1,0 +1,46 @@
+themes:
+  corporate:
+    style: professional
+    typography: clean
+    palette: brand_neutral
+    spacing: balanced
+  executive:
+    style: premium
+    typography: modern_serif_sans
+    palette: restrained
+    spacing: generous
+  government:
+    style: formal
+    typography: highly_readable
+    palette: official_neutral
+    spacing: structured
+  ngo_npo:
+    style: accessible
+    typography: friendly_professional
+    palette: impact
+    spacing: open
+  technology:
+    style: modern
+    typography: technical
+    palette: digital
+    spacing: compact
+  cybersecurity:
+    style: secure_technical
+    typography: modern_mono_accent
+    palette: cyber
+    spacing: structured
+  education:
+    style: academic_friendly
+    typography: readable
+    palette: learning
+    spacing: open
+  innovation:
+    style: futuristic
+    typography: modern
+    palette: innovation
+    spacing: dynamic
+  custom_brand:
+    style: brand_defined
+    typography: brand_defined
+    palette: brand_defined
+    spacing: brand_defined

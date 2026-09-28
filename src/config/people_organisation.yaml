@@ -1,0 +1,26 @@
+id: CFS-PEOPLE-ORGANISATION
+version: "1.0"
+
+people_organisation:
+  entities: [person, employee, team, department, role, skill, responsibility, assignment, capacity, performance_review, leave_request, hr_case]
+  lifecycle:
+    employee: [candidate, onboarding, active, leave, suspended, offboarding, archived]
+    assignment: [planned, active, completed, cancelled]
+    performance_review: [draft, submitted, reviewed, acknowledged, closed]
+    hr_case: [open, under_review, action_required, resolved, closed]
+  controls:
+    least_privilege: true
+    separation_of_duties: true
+    sensitive_hr_data_minimised: true
+    performance_data_access_controlled: true
+    employment_actions_require_authorization: true
+    leave_approval_requires_authority: true
+    audit_required: true
+    credentials_never_exposed: true
+  intelligence:
+    dimensions: [headcount, capacity, skills, workload, retention, performance, training, organisational_health]
+    confidence_required: true
+  ai_agent:
+    role: governed_people_organisation_assistant
+    may: [classify, summarise, workforce_analysis, skills_mapping, capacity_analysis, draft_hr_documents, recommend_training]
+    must_request_approval_for: [employment_action, compensation_change, disciplinary_action, sensitive_hr_decision]

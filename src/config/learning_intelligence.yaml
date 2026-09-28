@@ -1,0 +1,41 @@
+id: CFS-LEARNING-INTELLIGENCE
+version: "1.0"
+
+competency:
+  entities: [competency, skill, learning_outcome, evidence, mastery]
+  levels: [novice, developing, competent, proficient, advanced]
+  mastery_requires_evidence: true
+  ai_cannot_self_certify_mastery: true
+
+assessment:
+  types: [quiz, assignment, practical, project, exam, oral, observation]
+  integrity_controls: [attempt_limits, time_limits, provenance, review, audit]
+  high_impact_requires_human_review: true
+  final_grade_requires_provenance: true
+
+ai_avatar:
+  capabilities: [tutor, coach, mentor, study_companion, career_guide]
+  context: [learner_profile, course, progress, competency, approved_knowledge]
+  memory: governed_scoped
+  external_actions: approval_required
+
+course_generator:
+  inputs: [topic, audience, level, outcomes, duration, standards]
+  outputs: [course_outline, modules, lessons, activities, quizzes, rubrics, facilitator_guide]
+  workflow: [draft, validate, human_review, approve, publish]
+  generated_content_not_authoritative: true
+
+learning_paths:
+  methods: [competency_gap, prerequisite, role, goal, performance]
+  recommendations_require_evidence: true
+
+analytics:
+  dimensions: [engagement, progress, mastery, assessment, attendance, completion, retention, course_quality]
+  dashboards: [learner, instructor, programme, executive]
+  anomaly_detection: true
+  early_risk_detection: true
+
+interoperability:
+  targets: [SCORM, xAPI, LTI]
+  adapters: governed
+  external_writes_require_approval: true

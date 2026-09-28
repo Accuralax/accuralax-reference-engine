@@ -1,0 +1,119 @@
+version: 1
+
+mission:
+  purpose: "Bounded business-function intelligence and orchestration for CyberFusion and approved client organizations."
+  principles:
+    - strategy_to_execution
+    - financial_control
+    - revenue_growth
+    - innovation
+    - customer_centricity
+    - people_and_governance
+    - operational_excellence
+    - quality_and_continuous_improvement
+    - least_privilege
+    - human_approval_for_irreversible_actions
+
+functions:
+  strategy:
+    purpose: "Strategy, planning, transformation, market positioning, growth, risk and competitive analysis."
+    capabilities: [strategy, planning, transformation, market_analysis, competitive_analysis, growth, risk_assessment]
+    actions: [inspect, analyze, design, plan, report]
+    approval_actions: [strategy_commitment, external_side_effect]
+
+  finance:
+    purpose: "Budgeting, accounting workflows, cash-flow visibility, funding preparation, financial controls and reporting."
+    capabilities: [finance, budgeting, accounting, cash_flow, funding, financial_reporting, controls]
+    actions: [inspect, analyze, model, report, prepare]
+    approval_actions: [financial_transaction, payment, financial_decision, external_side_effect]
+
+  sales_marketing:
+    purpose: "Sales, marketing, brand, pricing, campaigns, digital acquisition, SEO, social, partnerships and customer growth."
+    capabilities: [sales, marketing, branding, pricing, seo, social_media, campaigns, partnerships, crm]
+    actions: [inspect, analyze, design, draft, prepare]
+    approval_actions: [publish, campaign_launch, pricing_change, external_side_effect]
+
+  research_development:
+    purpose: "Research, experimentation, product discovery, innovation, market intelligence and new revenue opportunities."
+    capabilities: [research, development, experimentation, product_discovery, innovation, market_research]
+    actions: [inspect, research, analyze, prototype, test, report]
+    approval_actions: [production_release, external_side_effect]
+
+  information_technology:
+    purpose: "Applications, systems, hardware, software, networks, cloud, security and technical support."
+    capabilities: [it, systems, software, hardware, networks, cloud, security]
+    actions: [inspect, diagnose, design, implement, test, report]
+    approval_actions: [production_change, deploy, external_side_effect]
+
+  customer_service:
+    purpose: "Customer enquiries, support, issue resolution, service experience, retention and feedback."
+    capabilities: [customer_service, support, complaints, returns, communication, retention, feedback]
+    actions: [inspect, respond, triage, document, escalate]
+    approval_actions: [refund, compensation, account_change, external_side_effect]
+
+  human_resources:
+    purpose: "People operations, recruitment, onboarding, performance, policies, learning, workforce planning and employee relations."
+    capabilities: [hr, recruitment, onboarding, performance, workforce, learning, employee_relations, policy]
+    actions: [inspect, analyze, prepare, report, recommend]
+    approval_actions: [hire, terminate, compensation_change, disciplinary_action, external_side_effect]
+
+  design:
+    purpose: "Brand identity, visual communication, product interfaces, content design and creative production."
+    capabilities: [design, branding, ux, ui, creative, content, visual_communication]
+    actions: [inspect, design, prototype, test, prepare]
+    approval_actions: [publish, brand_change, external_side_effect]
+
+  communications:
+    purpose: "Public relations, corporate communications, media, executive messaging and crisis communications."
+    capabilities: [communications, public_relations, media, crisis_communication, executive_communications]
+    actions: [inspect, draft, prepare, analyze, report]
+    approval_actions: [publish, spokesperson_statement, crisis_release, external_side_effect]
+
+  governance:
+    purpose: "Governance, accountability, policies, controls, risk oversight, decision rights and compliance coordination."
+    capabilities: [governance, accountability, policy, controls, risk, compliance, decision_rights]
+    actions: [inspect, assess, design, validate, report]
+    approval_actions: [policy_change, governance_decision, external_side_effect]
+
+  production:
+    purpose: "Product and service production, manufacturing, content production, capacity planning and delivery execution."
+    capabilities: [production, manufacturing, service_delivery, capacity, scheduling, production_control]
+    actions: [inspect, plan, schedule, validate, report]
+    approval_actions: [production_change, capacity_commitment, external_side_effect]
+
+  sourcing:
+    purpose: "Procurement, purchasing, supplier management, supply chain, logistics and strategic partnerships."
+    capabilities: [sourcing, procurement, purchasing, suppliers, supply_chain, logistics, partnerships]
+    actions: [inspect, analyze, compare, prepare, report]
+    approval_actions: [purchase, supplier_commitment, contract_commitment, external_side_effect]
+
+  quality_management:
+    purpose: "Quality planning, assurance, control, testing, continuous improvement and corrective actions."
+    capabilities: [quality, qa, quality_assurance, quality_control, testing, continuous_improvement]
+    actions: [inspect, test, validate, analyze, report]
+    approval_actions: [quality_release, corrective_action, external_side_effect]
+
+  distribution:
+    purpose: "Distribution channels, fulfillment, delivery, logistics coordination and customer reach."
+    capabilities: [distribution, fulfillment, delivery, channels, logistics, inventory]
+    actions: [inspect, plan, validate, schedule, report]
+    approval_actions: [dispatch, channel_change, external_side_effect]
+
+  operations:
+    purpose: "Day-to-day business execution, process management, service operations, capacity, workflows and performance."
+    capabilities: [operations, process_management, workflow, service_operations, capacity, performance_management]
+    actions: [inspect, diagnose, plan, coordinate, validate, report]
+    approval_actions: [operational_change, production_change, external_side_effect]
+
+policy:
+  default_action: deny
+  credentials_exposed_to_agents: false
+  provider_access: gateway_only
+  production_access: gateway_only
+  financial_transactions: human_approval
+  employment_decisions: human_approval
+  external_communications: human_approval
+  procurement_commitments: human_approval
+  production_release: human_approval
+  every_change: audit
+  every_release: verification

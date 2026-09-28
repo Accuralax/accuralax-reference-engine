@@ -1,0 +1,35 @@
+studio:
+  name: CyberFusion Creative Studio
+  reference_prefix: CFS-CR
+  default_mode: document
+  modes:
+    document:
+      label: Document
+      tools: [templates, text, tables, themes, versions, qa, approval, export]
+    content:
+      label: Content
+      tools: [prompt, rewrite, research, brand, variants, qa, export]
+    image:
+      label: Image
+      tools: [prompt, generate, edit, variations, brand, export]
+    video:
+      label: Video
+      tools: [script, storyboard, scenes, timeline, captions, export]
+    presentation:
+      label: Presentation
+      tools: [slides, layouts, notes, themes, qa, export]
+  workspace:
+    left_rail: [create, templates, brand, media, elements, text, tools]
+    center: canvas
+    right_panel: [supervisor, founder, specialist, knowledge, qa, approval]
+    bottom_bar: [undo, redo, zoom, version, status, reference, export]
+  shared_actions: [rewrite, expand, shorten, simplify, professionalise, summarise, translate, add_section, remove_section, apply_theme, consistency_check]
+  security:
+    credentials_exposed: false
+    approval_aware: true
+    bounded_agents: true
+    audit_trace: true
+  rendering:
+    webgl_optional: true
+    three_js_optional: true
+    anime_js_optional: true

@@ -1,0 +1,46 @@
+version: 1
+
+mission:
+  purpose: "Continuous authorized security validation and protection of CyberFusion systems and business operations."
+  principles:
+    - authorized_scope_only
+    - defensive_by_default
+    - least_privilege
+    - bounded_autonomy
+    - human_approval_for_high_risk_actions
+    - full_auditability
+
+teams:
+  red_team:
+    role: security_validation
+    purpose: "Simulate documented threat scenarios inside an approved test scope."
+    allowed_modes: [threat_modeling, attack_path_simulation, control_validation, purple_team_exercise]
+    live_testing_requires_approval: true
+    max_iterations: 5
+
+  blue_team:
+    role: security_defense
+    purpose: "Detect, contain, harden, recover, and verify defensive controls."
+    allowed_modes: [monitoring, detection_engineering, configuration_review, incident_triage, hardening, recovery_validation]
+    max_iterations: 8
+
+  security_product_team:
+    role: defensive_product_engineering
+    purpose: "Turn validated security findings into protective products and services."
+    allowed_modes: [control_design, prototype, test, package, documentation]
+    release_requires_human_approval: true
+
+orchestration:
+  flow:
+    - scope
+    - threat_model
+    - red_validation
+    - blue_defense
+    - purple_validation
+    - harden
+    - verify
+    - product_opportunity
+    - audit
+  max_cycles: 3
+  cycle_detection: true
+  terminal_failure: true

@@ -1,0 +1,29 @@
+id: CFS-BUSINESS-INTELLIGENCE
+version: "1.0"
+
+business_intelligence:
+  entities: [metric_definition, kpi, dashboard, report, data_source, dimension, measure, insight, anomaly, trend, alert]
+  lifecycle:
+    metric: [draft, approved, active, deprecated]
+    dashboard: [draft, reviewed, approved, published, archived]
+    report: [draft, reviewed, approved, published, archived]
+    alert: [draft, active, acknowledged, resolved, disabled]
+  controls:
+    metric_definition_required: true
+    metric_owner_required: true
+    source_lineage_required: true
+    calculation_version_required: true
+    executive_metrics_require_approval: true
+    sensitive_data_access_controlled: true
+    dashboard_publication_requires_approval: true
+    stale_data_must_be_flagged: true
+    anomaly_confidence_required: true
+    audit_required: true
+    credentials_never_exposed: true
+  intelligence:
+    dimensions: [revenue, sales, customers, projects, people, finance, quality, security, operations, technology]
+    capabilities: [kpi_monitoring, trend_detection, anomaly_detection, forecasting, root_cause_analysis, executive_reporting]
+  ai_agent:
+    role: governed_business_intelligence_assistant
+    may: [query, summarise, compare, detect_anomalies, analyse_trends, prepare_dashboards, draft_reports]
+    must_request_approval_for: [metric_definition_change, executive_metric_publish, sensitive_export, public_dashboard]

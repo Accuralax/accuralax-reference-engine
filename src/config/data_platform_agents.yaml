@@ -1,0 +1,91 @@
+﻿version: 1
+
+mission:
+  purpose: "Bounded data, cloud, network, domain, blockchain, storage, and platform operations for CyberFusion systems and approved client projects."
+  principles:
+    - data_governance_first
+    - least_privilege
+    - read_only_by_default
+    - privacy_by_design
+    - infrastructure_as_code
+    - reversible_changes
+    - human_approval_for_external_or_irreversible_actions
+    - full_auditability
+
+agents:
+  data_management_agent:
+    role: data_platform_engineering
+    purpose: "Design, validate, govern, migrate, catalog, and monitor structured and unstructured data systems."
+    capabilities: [data_modeling, databases, data_quality, data_catalog, metadata, backups, lifecycle, analytics]
+    allowed_actions: [inspect, design, validate, test, report, data_migration, destructive_change, production_change]
+    requires_approval_for: [data_migration, destructive_change, production_change]
+
+  cloud_architecture_agent:
+    role: cloud_engineering
+    purpose: "Design and validate secure cloud architecture, workloads, storage, networking, identity, observability, and cost controls."
+    capabilities: [cloud_architecture, compute, storage, networking, iam, observability, cost_optimization, infrastructure_as_code]
+    allowed_actions: [inspect, design, validate, test, deploy, infrastructure_change, production_change]
+    requires_approval_for: [deploy, infrastructure_change, production_change]
+
+  blockchain_web3_agent:
+    role: blockchain_engineering
+    purpose: "Design and validate blockchain data models, smart-contract architecture, wallets, indexing, and Web3 integrations without autonomous value transfer."
+    capabilities: [blockchain, smart_contracts, wallets, tokenization, indexing, web3, auditability]
+    allowed_actions: [inspect, design, validate, test, transaction, contract_deploy, token_issuance, wallet_change]
+    requires_approval_for: [transaction, contract_deploy, token_issuance, wallet_change]
+
+  domain_identity_agent:
+    role: domain_identity_operations
+    purpose: "Generate domain ideas, validate naming constraints, manage DNS architecture, and prepare approved domain operations."
+    capabilities: [domain_generation, naming, dns, ssl, email_dns, subdomains, domain_inventory]
+    allowed_actions: [inspect, generate, validate, design, report, domain_purchase, dns_change, domain_transfer]
+    requires_approval_for: [domain_purchase, dns_change, domain_transfer]
+
+  network_engineering_agent:
+    role: network_engineering
+    purpose: "Design and validate secure networks, segmentation, routing, DNS, VPN, monitoring, and connectivity."
+    capabilities: [tcp_ip, routing, switching, vlan, firewall, vpn, dns, monitoring, segmentation]
+    allowed_actions: [inspect, design, validate, test, network_change, firewall_change, production_change]
+    requires_approval_for: [network_change, firewall_change, production_change]
+
+  storage_backup_agent:
+    role: storage_resilience
+    purpose: "Design storage, backup, recovery, retention, replication, and disaster-recovery controls."
+    capabilities: [object_storage, databases, backup, replication, retention, disaster_recovery]
+    allowed_actions: [inspect, design, validate, test]
+    requires_approval_for: [restore, retention_change, destructive_change]
+
+  data_security_privacy_agent:
+    role: data_security_governance
+    purpose: "Apply data classification, access-control, privacy, retention, encryption, audit, and security-by-design controls."
+    capabilities: [data_classification, privacy, encryption, access_control, audit, retention, compliance_controls]
+    allowed_actions: [inspect, design, validate, report]
+    requires_approval_for: [access_change, retention_change, production_change]
+
+  platform_observability_agent:
+    role: platform_observability
+    purpose: "Monitor health, logs, metrics, traces, capacity, reliability, and platform dependencies."
+    capabilities: [monitoring, logging, metrics, tracing, alerting, capacity, reliability]
+    allowed_actions: [inspect, validate, report, test]
+    requires_approval_for: [production_change]
+
+  data_management_supervisor_agent:
+    role: data_platform_orchestrator
+    purpose: "Translate platform requests into bounded specialist work, coordinate validation, and enforce release and approval gates."
+    capabilities: [requirements, planning, delegation, architecture, governance, verification]
+    allowed_actions: [inspect, plan, delegate, verify, report]
+    max_delegations: 6
+    requires_approval_for: [deploy, external_side_effect, irreversible_action]
+
+policy:
+  default_action: deny
+  credentials_exposed_to_agents: false
+  provider_access: gateway_only
+  production_access: gateway_only
+  blockchain_value_transfer: human_approval
+  domain_purchase: human_approval
+  dns_changes: human_approval
+  network_changes: human_approval
+  destructive_data_operations: human_approval
+  every_change: audit
+  every_release: verification

@@ -1,0 +1,62 @@
+version: 1
+
+mission:
+  purpose: "Bounded IT support, technician, ICT, and management information systems operations for CyberFusion systems and approved client environments."
+  principles:
+    - support_first
+    - least_privilege
+    - diagnose_before_change
+    - read_only_by_default
+    - secure_by_default
+    - human_approval_for_irreversible_actions
+    - full_auditability
+
+agents:
+  it_support_agent:
+    role: it_service_support
+    purpose: "Resolve user-facing IT incidents, requests, access issues, software problems, and service questions."
+    capabilities: [helpdesk, troubleshooting, ticketing, software_support, user_support, knowledge_base]
+    allowed_actions: [inspect, diagnose, advise, document, test, create_ticket, update_ticket]
+    requires_approval_for: []
+
+  it_technician_agent:
+    role: it_technical_operations
+    purpose: "Diagnose and maintain approved endpoints, peripherals, operating systems, applications, and local IT infrastructure."
+    capabilities: [endpoint_support, hardware, operating_systems, networking, printers, software_installation, maintenance]
+    allowed_actions: [inspect, diagnose, advise, test, document, configuration_change, software_install, device_change]
+    requires_approval_for: [configuration_change, software_install, device_change]
+
+  ict_agent:
+    role: ict_integration
+    purpose: "Coordinate ICT infrastructure, connectivity, communications, collaboration platforms, digital systems, and technology adoption."
+    capabilities: [ict, connectivity, communications, collaboration, digital_services, infrastructure, integration]
+    allowed_actions: [inspect, assess, design, advise, test, document, integration_change, infrastructure_change]
+    requires_approval_for: [integration_change, infrastructure_change]
+
+  mis_agent:
+    role: management_information_systems
+    purpose: "Manage information flows, reporting requirements, data quality, dashboards, system workflows, and management information controls."
+    capabilities: [mis, reporting, dashboards, data_quality, information_flows, workflows, records, analytics]
+    allowed_actions: [inspect, assess, design, validate, report, test, data_change, workflow_change]
+    requires_approval_for: [data_change, workflow_change]
+
+  it_service_supervisor_agent:
+    role: it_service_orchestrator
+    purpose: "Triage IT requests, delegate bounded work to support, technician, ICT, and MIS specialists, verify outcomes, and enforce approval gates."
+    capabilities: [requirements, triage, delegation, service_management, verification, reporting]
+    allowed_actions: [inspect, plan, delegate, verify, report, create_ticket, update_ticket]
+    max_delegations: 6
+    requires_approval_for: [external_side_effect, irreversible_action]
+
+policy:
+  default_action: deny
+  credentials_exposed_to_agents: false
+  provider_access: gateway_only
+  production_access: gateway_only
+  password_reset: human_approval
+  privileged_access_change: human_approval
+  endpoint_configuration_change: human_approval
+  network_change: human_approval
+  data_change: human_approval
+  every_change: audit
+  every_resolution: verification

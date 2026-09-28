@@ -1,0 +1,46 @@
+schema:
+  id: CFS-MASTER-ENTITY
+  version: "1.0"
+  principle: shared_enterprise_language
+
+entities:
+  person: {key: person_id, links: [organisation, user, customer, employee, partner]}
+  organisation: {key: organisation_id, links: [people, projects, products, services, contracts, transactions]}
+  user: {key: user_id, links: [person, roles, permissions, sessions]}
+  agent: {key: agent_id, links: [user, skills, tools, knowledge, traces]}
+  capability: {key: capability_id, links: [agents, services, policies, controls, owners]}
+  skill: {key: skill_id, links: [agents, tools, policies]}
+  tool: {key: tool_id, links: [agents, permissions, integrations]}
+  project: {key: project_id, links: [organisation, people, products, services, tasks, risks, budget]}
+  task: {key: task_id, links: [project, person, agent, deliverable, events]}
+  product: {key: product_id, links: [organisation, projects, services, pricing, documents]}
+  service: {key: service_id, links: [organisation, product, customers, pricing, policies, sla]}
+  customer: {key: customer_id, links: [person, organisation, leads, opportunities, orders, support]}
+  lead: {key: lead_id, links: [customer, campaign, opportunity]}
+  opportunity: {key: opportunity_id, links: [customer, lead, quote, contract]}
+  contract: {key: contract_id, links: [organisation, customer, service, documents, approvals]}
+  transaction: {key: transaction_id, links: [customer, invoice, payment, ledger_entry, audit_event]}
+  invoice: {key: invoice_id, links: [customer, service, transaction, payment]}
+  payment: {key: payment_id, links: [customer, invoice, transaction, settlement]}
+  ledger_entry: {key: ledger_entry_id, links: [transaction, account, audit_event]}
+  document: {key: document_id, links: [organisation, project, product, service, knowledge, approvals, versions]}
+  knowledge_item: {key: knowledge_id, links: [document, source, policy, research, embeddings]}
+  research: {key: research_id, links: [project, knowledge, experiments, findings, ip]}
+  policy: {key: policy_id, links: [regulation, control, capability, approvals]}
+  regulation: {key: regulation_id, links: [jurisdiction, policy, control, evidence]}
+  risk: {key: risk_id, links: [project, capability, policy, control, owner, incidents]}
+  control: {key: control_id, links: [policy, risk, capability, evidence, tests]}
+  approval: {key: approval_id, links: [user, agent, action, policy, audit_event]}
+  event: {key: event_id, links: [actor, entity, project, transaction, trace]}
+  audit_event: {key: audit_id, links: [actor, entity, action, approval, evidence]}
+  trace: {key: trace_id, links: [agent, event, workflow, audit_event]}
+  metric: {key: metric_id, links: [entity, data_source, dashboard]}
+  dashboard: {key: dashboard_id, links: [metrics, users, roles, capabilities]}
+
+identity:
+  every_entity_requires_stable_key: true
+  timestamps_required: true
+  source_required_for_external_data: true
+  provenance_required_for_knowledge: true
+  audit_required_for_sensitive_actions: true
+  credentials_must_never_be_entity_data: true
