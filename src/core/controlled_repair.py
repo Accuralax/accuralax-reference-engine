@@ -43,12 +43,12 @@ class ControlledRepairApplier:
         original = target.read_bytes()
         try:
             target.write_text(replacement, encoding="utf-8")
-            if target.read_bytes() != replacement.encode("utf-8"):
+            if target.read_text(encoding="utf-8") != replacement:
                 raise RuntimeError("post-write verification failed")
             return ApplyResult(True, True, False, "repair applied with restore point")
-        except Exception:
+        except Exception as exc:
             shutil.copy2(backup, target)
             restored = target.read_bytes() == original
-            return ApplyResult(False, False, restored, "repair failed and rollback was attempted")
+            return ApplyResult(False, False, restored, f"repair failed and rollback was attempted: {type(exc).__name__}: {exc}")
         finally:
             shutil.rmtree(backup_dir, ignore_errors=True)

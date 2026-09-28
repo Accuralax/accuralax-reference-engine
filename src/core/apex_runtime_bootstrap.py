@@ -11,6 +11,8 @@ from .omega15_enterprise_final import Omega15EnterpriseFinal
 from .omega_final_convergence import OmegaFinalConvergence
 from .apex_production_certification import ApexProductionCertification
 from .runtime_invariants import RuntimeInvariants
+from pathlib import Path
+from .apex_autonomous_development import ApexAutonomousDevelopment
 
 class ApexRuntimeBootstrap:
     """Canonical in-process Ω8→Ω15 runtime composition and certification."""
@@ -21,6 +23,7 @@ class ApexRuntimeBootstrap:
         self.omega12=Omega12AdvancedAIEvaluation()
         self.omega12_production=Omega12ProductionConvergence(self.omega12)
         self.omega13=Omega13AutonomousOptimization(evaluator=self.omega12, compliance=self.omega10, marketplace=self.omega11)
+        self.autonomous_development=ApexAutonomousDevelopment(Path(__file__).resolve().parents[2])
         self.omega14=Omega14GlobalMultiTenantPlatform()
         self.omega15=Omega15EnterpriseFinal()
         self.invariants=RuntimeInvariants()
@@ -37,7 +40,7 @@ class ApexRuntimeBootstrap:
         self.certifier=ApexProductionCertification(self.stages)
 
     def health(self):
-        return {"status":"ok","execution_authority":"omega9","stages":{k:v.health() for k,v in self.stages.items()},"omega12_production":self.omega12_production.health(),"invariants":self.invariants.health()}
+        return {"status":"ok","execution_authority":"omega9","stages":{k:v.health() for k,v in self.stages.items()},"omega12_production":self.omega12_production.health(),"autonomous_development":self.autonomous_development.health_snapshot(),"invariants":self.invariants.health()}
 
     def gates(self):
         return {k:self._stage_gate(k,v) for k,v in self.stages.items()}
