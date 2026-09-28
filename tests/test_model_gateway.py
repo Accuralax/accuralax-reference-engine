@@ -36,6 +36,12 @@ def test_evaluation_gate_blocks_regression(tmp_path):
     assert not blocked['allowed'] and blocked['reason']=='evaluation_regression'
 
 
+def test_sqlite_busy_timeout(tmp_path):
+    g=ModelGateway(str(tmp_path/'models.sqlite3'))
+    with g.db() as c:
+        assert c.execute("PRAGMA busy_timeout").fetchone()[0] == 15000
+
+
 def test_policy_tenant_isolation(tmp_path):
     g=ModelGateway(str(tmp_path/'models.sqlite3'))
     g.register_policy('t1','w','p','generation')
