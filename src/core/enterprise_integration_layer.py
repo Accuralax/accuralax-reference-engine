@@ -28,7 +28,7 @@ class EnterpriseIntegrationLayer:
             c.execute("CREATE INDEX IF NOT EXISTS idx_integration_scope ON integration_jobs(tenant_id,workspace_id,created_at)")
     @contextmanager
     def _db(self):
-        c=sqlite3.connect(self.db_path); c.row_factory=sqlite3.Row
+        c=sqlite3.connect(self.db_path, timeout=15.0); c.execute("PRAGMA busy_timeout=15000"); c.row_factory=sqlite3.Row
         try: yield c; c.commit()
         finally: c.close()
     @staticmethod

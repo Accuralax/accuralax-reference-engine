@@ -16,7 +16,8 @@ class ApprovalExecutionGate:
                 if col not in cols: c.execute(f"ALTER TABLE decisions ADD COLUMN {col} TEXT")
     @contextmanager
     def db(self):
-        c = sqlite3.connect(self.db_path)
+        c = sqlite3.connect(self.db_path, timeout=15.0)
+        c.execute("PRAGMA busy_timeout=15000")
         try:
             yield c
             c.commit()
