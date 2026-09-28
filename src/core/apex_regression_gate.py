@@ -14,6 +14,10 @@ class ApexRegressionGate:
         self.checks.append((str(name), check))
         return self
 
+    def register_invariants(self, invariants):
+        self.register("cross_layer_invariants", invariants.evaluate)
+        return self
+
     def evaluate(self):
         results = []
         if self.control_plane:
