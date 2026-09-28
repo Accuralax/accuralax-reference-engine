@@ -1,7 +1,7 @@
 from __future__ import annotations
 import json, os, sqlite3, uuid
-from datetime import datetime, timezone
 from contextlib import contextmanager
+from datetime import datetime, timezone
 
 class WorkflowAutomation:
     """Durable tenant-scoped workflow definitions and bounded execution plans."""
@@ -15,7 +15,8 @@ class WorkflowAutomation:
             c.execute("CREATE TABLE IF NOT EXISTS runs(run_id TEXT PRIMARY KEY,workflow_id TEXT,tenant_id TEXT,workspace_id TEXT,status TEXT,current_step INTEGER,result TEXT,created_at TEXT,updated_at TEXT)")
     @contextmanager
     def db(self):
-        c = sqlite3.connect(self.db_path)
+        c = sqlite3.connect(self.db_path, timeout=15.0)
+        c.execute('PRAGMA busy_timeout=15000')
         try:
             yield c
             c.commit()

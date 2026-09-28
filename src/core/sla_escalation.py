@@ -1,5 +1,6 @@
 from __future__ import annotations
 import json, os, sqlite3, uuid
+from contextlib import contextmanager
 from datetime import datetime, timezone, timedelta
 
 class SLAEscalation:
@@ -12,10 +13,15 @@ class SLAEscalation:
             c.execute("CREATE TABLE IF NOT EXISTS policies(policy_id TEXT PRIMARY KEY,tenant_id TEXT,workspace_id TEXT,name TEXT,target_type TEXT,target_hours REAL,escalation_hours REAL,active INTEGER,metadata TEXT,created_at TEXT)")
             c.execute("CREATE TABLE IF NOT EXISTS items(item_id TEXT PRIMARY KEY,policy_id TEXT,tenant_id TEXT,workspace_id TEXT,reference_type TEXT,reference_id TEXT,owner_id TEXT,status TEXT,due_at TEXT,escalated_at TEXT,created_at TEXT,updated_at TEXT)")
             c.execute("CREATE TABLE IF NOT EXISTS events(event_id TEXT PRIMARY KEY,item_id TEXT,tenant_id TEXT,workspace_id TEXT,event_type TEXT,actor_id TEXT,metadata TEXT,created_at TEXT)")
+    @contextmanager
     def db(self):
         c=sqlite3.connect(self.db_path, timeout=15.0)
         c.execute('PRAGMA busy_timeout=15000')
-        return c
+        try:
+            yield c
+            c.commit()
+        finally:
+            c.close()
     def scope(self,t,w):
         if not t or not w: raise ValueError("tenant_id_and_workspace_id_required")
         return str(t),str(w)

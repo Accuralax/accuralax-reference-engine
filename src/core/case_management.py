@@ -1,5 +1,6 @@
 from __future__ import annotations
 import json, os, sqlite3, uuid
+from contextlib import contextmanager
 from datetime import datetime, timezone
 
 class CaseManagement:
@@ -15,10 +16,15 @@ class CaseManagement:
             c.execute("CREATE TABLE IF NOT EXISTS case_events(event_id TEXT PRIMARY KEY,case_id TEXT,tenant_id TEXT,workspace_id TEXT,event_type TEXT,actor_id TEXT,payload TEXT,created_at TEXT)")
             c.execute("CREATE TABLE IF NOT EXISTS case_tasks(task_id TEXT PRIMARY KEY,case_id TEXT,tenant_id TEXT,workspace_id TEXT,title TEXT,assignee TEXT,state TEXT,due_at TEXT,created_at TEXT,updated_at TEXT)")
 
+    @contextmanager
     def db(self):
         c=sqlite3.connect(self.db_path, timeout=15.0)
         c.execute('PRAGMA busy_timeout=15000')
-        return c
+        try:
+            yield c
+            c.commit()
+        finally:
+            c.close()
     def scope(self,t,w):
         if not t or not w: raise ValueError("tenant_id_and_workspace_id_required")
         return str(t),str(w)

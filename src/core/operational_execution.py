@@ -20,7 +20,7 @@ class OperationalExecution:
             return {"task_id": task["task_id"], "status": "created"}
         if action in {"start_sla", "sla.start"} and self.sla:
             item_id = context.get("item_id") or context.get("task_id")
-            result = self.sla.start(tenant_id, workspace_id, context["sla_policy_id"], item_id, actor_id)
+            result = self.sla.start(tenant_id, workspace_id, context["sla_policy_id"], "task", item_id, actor_id)
             return {"sla": result, "status": "started"}
         if action in {"notify", "notification.send"} and self.notifications:
             notice = context.get("notification") or context
@@ -85,7 +85,7 @@ class OperationalExecution:
         result={"task_created":True,"task_id":task["task_id"],"sla_started":False,"notification_queued":False}
         if self.sla and payload.get("sla_policy_id"):
             try:
-                self.sla.start(t,w,payload["sla_policy_id"],task["task_id"],actor_id)
+                self.sla.start(t,w,payload["sla_policy_id"],"task",task["task_id"],actor_id)
                 result["sla_started"]=True
             except Exception as exc: result["sla_error"]=str(exc)
         if self.notifications and payload.get("notification"):
@@ -125,14 +125,7 @@ class OperationalExecution:
         errors=[k for k in result if k.endswith("_error")]
         status=("failed" if errors else "completed") if auto_execute else "awaiting_execution"
         if errors: result["execution_errors"]=errors
-        if self.command_control and auto_execute:
-            try:
-                if self.command_control.audit:
-                    self.command_control.audit.record(t,w,actor_id,"operational.execution","operational_execution",status, "task",task["task_id"],event_id, None, None, result)
-                if self.command_control.observability:
-                    self.command_control.observability.log(t,w,"INFO","operational execution completed",metadata=result)
-            except Exception as exc:
-                result["telemetry_error"]=str(exc)
+        self._telemetry(t,w,actor_id,"operational.execution",status,run_id=run_id,task_id=task["task_id"],trace_id=trace_id,correlation_id=correlation_id,metadata={"event_id":event_id,"event_type":event_type,"auto_execute":auto_execute,"result":result})
         with self.db() as c:c.execute("INSERT INTO runs VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",(run_id,t,w,event_id,event_type,status,task["task_id"],json.dumps(result),now,now,trace_id,correlation_id))
         return {"status":status,"run_id":run_id,"task":task,"result":result}
     def history(self,t,w,limit=100):
