@@ -10,7 +10,7 @@ STAGES = json.loads((DATA / "apex_stage_certification.json").read_text(encoding=
 OFFLINE_PATH = DATA / "apex_offline_production_certification.json"
 OFFLINE = json.loads(OFFLINE_PATH.read_text(encoding="utf-8")) if OFFLINE_PATH.exists() else {}
 
-A20_OK = A20.get("status") == "CERTIFIED" and A20.get("tests_passed") == 657 and A20.get("tests_failed") == 0 and A20.get("tests_skipped") == 0
+A20_OK = A20.get("status") == "CERTIFIED" and A20.get("tests_passed") == 659 and A20.get("tests_failed") == 0 and A20.get("tests_skipped") == 0
 STAGE_ROWS = {x["stage"]: x for x in STAGES.get("stages", [])}
 OFFLINE_OK = OFFLINE.get("status") == "CERTIFIED_OFFLINE"
 
@@ -21,7 +21,7 @@ LIVE_BLOCK = [stage for stage in LIVE_REQUIRED if not STAGE_ROWS.get(stage, {}).
 result = {
     "pipeline": "APEX-A19→A33→Ω",
     "build_state": "COMPLETE",
-    "regression": "CERTIFIED_657" if A20_OK else "BLOCKED",
+    "regression": "CERTIFIED_659" if A20_OK else "BLOCKED",
     "authoritative_regression_sha256": A20.get("sha256"),
     "offline_stage_verification": "COMPLETE" if OFFLINE_OK else "BLOCKED",
     "offline_certification": "CERTIFIED_OFFLINE" if OFFLINE_OK else "MISSING_OR_FAILED",

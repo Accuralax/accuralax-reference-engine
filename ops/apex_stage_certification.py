@@ -1,7 +1,7 @@
 from pathlib import Path
 import json, hashlib
 ROOT=Path(__file__).resolve().parents[1]; DATA=ROOT/"data"/"apex_parallel"
-reg=json.loads((DATA/"apex19_resilient_manifest.json").read_text(encoding="utf-8"))
+reg=json.loads((DATA/"apex20_current_manifest.json").read_text(encoding="utf-8"))
 files={Path(f).name for r in reg for f in r["files"] if r.get("status")=="passed"}
 mapping={
 "APEX-A21":["test_repair_circuit.py","test_repair_graph.py","test_self_healing.py","test_self_healing_graph.py","test_apex_integration_next.py"],

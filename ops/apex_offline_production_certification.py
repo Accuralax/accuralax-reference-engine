@@ -38,7 +38,7 @@ def test_subset() -> dict:
 def a20_check() -> dict:
     if not A20.exists(): return {"status": "FAIL", "reason": "A20 certification missing"}
     data = json.loads(A20.read_text(encoding="utf-8"))
-    ok = data.get("status") == "CERTIFIED" and data.get("tests_passed") == 657 and data.get("tests_failed") == 0 and data.get("tests_skipped") == 0
+    ok = data.get("status") == "CERTIFIED" and data.get("tests_passed") == 659 and data.get("tests_failed") == 0 and data.get("tests_skipped") == 0
     return {"status": "PASS" if ok else "FAIL", "tests_passed": data.get("tests_passed"), "sha256": data.get("sha256")}
 
 
