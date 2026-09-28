@@ -32,7 +32,9 @@ def main() -> int:
     print(f"APEX_BATCH_START={n} FILES={len(group)}", flush=True)
     for p in group:
         print(f"APEX_FILE={p.name}", flush=True)
-    code = run(["-m", "pytest", "-q", *map(str, group)])
+    batch_tmp = ROOT / ".apex_tmp" / f"release_batch_{n}"
+    batch_tmp.mkdir(parents=True, exist_ok=True)
+    code = run(["-m", "pytest", "-q", "--basetemp", str(batch_tmp), *map(str, group)])
     print(f"APEX_BATCH_RESULT={n} EXIT={code}", flush=True)
     return code
 
