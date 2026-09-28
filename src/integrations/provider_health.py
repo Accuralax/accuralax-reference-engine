@@ -12,17 +12,25 @@ class ProviderHealth:
     capabilities:tuple[str,...]
     probe_status:str
     detail:str|None=None
-    def public(self):
-        return {"system":self.system,"configured":self.configured,"adapter_present":self.adapter_present,"capabilities":list(self.capabilities),"probe_status":self.probe_status,"detail":self.detail}
+    @property
+    def credential_state(self): return "available" if self.configured else "missing"
+    @property
+    def contract_ok(self): return self.adapter_present and bool(self.capabilities)
+    def public(self): return {"system":self.system,"configured":self.configured,"adapter_present":self.adapter_present,"capabilities":list(self.capabilities),"probe_status":self.probe_status,"detail":self.detail}
+
+class ProviderHealthProbe:
+    def __init__(self, credentials=None):
+        self.credentials = credentials or CredentialProvider()
+    def probe(self, system, adapter=None, capabilities=()):
+        configured = self.credentials.has_credential(system)
+        caps = tuple(capabilities)
+        return ProviderHealth(system, configured, bool(adapter), caps, "ready" if configured else "credential_missing")
 
 class ProviderHealthRegistry:
-    def __init__(self,credentials:CredentialProvider|None=None,adapters:dict[str,Any]|None=None):
-        self.credentials=credentials or CredentialProvider()
-        self.adapters=adapters or {}
-    def inspect(self,system:str,*,probe:Callable[[],Any]|None=None,live=False):
-        caps=tuple(sorted(k for k,b in CAPABILITIES.items() if b.system==system))
-        configured=self.credentials.has_credential(system)
-        present=system in self.adapters
+    def __init__(self,credentials=None,adapters=None):
+        self.credentials=credentials or CredentialProvider(); self.adapters=adapters or {}
+    def inspect(self,system,*,probe:Callable[[],Any]|None=None,live=False):
+        caps=tuple(sorted(k for k,b in CAPABILITIES.items() if b.system==system)); configured=self.credentials.has_credential(system); present=system in self.adapters
         if not present: status="adapter_missing"
         elif live and probe is not None:
             try: status="healthy" if probe() is not False else "unhealthy"

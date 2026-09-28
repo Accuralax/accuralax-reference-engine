@@ -81,3 +81,47 @@ def test_response_normalization_retryability():
     assert ok.status=="completed"
     assert retry.retryable is True
     assert retry.error_code=="temporary_timeout"
+
+
+def test_retry_policy_exponential_and_nonretryable():
+    from integrations.retry_policy import RetryPolicy
+    p=RetryPolicy(max_attempts=4,base_delay_seconds=2,max_delay_seconds=5)
+    assert p.delay(1)==2
+    assert p.delay(2)==4
+    assert p.delay(3)==5
+    assert p.should_retry(1,retryable=True)
+    assert not p.should_retry(4,retryable=True)
+    assert not p.should_retry(1,retryable=False)
+
+
+def test_reconciliation_worker_replays_failed_job(tmp_path):
+    from integrations.reconciliation_worker import ReconciliationWorker
+    calls=[]
+    class Flaky:
+        def execute(self, action, payload):
+            calls.append(1)
+            if len(calls)==1: raise RuntimeError("temporary timeout")
+            return {"ok":True}
+    x, _, _ = build(tmp_path, hub=Flaky(), max_attempts=3)
+    first=x.dispatch("t","w","crm.contact.search",{"email":"worker@example.com"},idempotency_key="worker-1")
+    assert first["status"]=="failed"
+    result=ReconciliationWorker(x.durable).run_once("t","w")
+    assert result.scanned==1 and result.completed==1
+    assert x.durable.reconciliation_queue("t","w")==[]
+
+
+def test_reconciliation_worker_is_bounded(tmp_path):
+    from integrations.reconciliation_worker import ReconciliationWorker
+    worker=ReconciliationWorker(build(tmp_path)[0].durable)
+    result=worker.run_until_empty("t","w",max_cycles=2)
+    assert result.scanned==0 and result.replayed==0
+
+
+def test_provider_health_contract_probe_hides_credentials(monkeypatch):
+    from integrations.provider_health import ProviderHealthProbe
+    from integrations.credentials import CredentialProvider
+    monkeypatch.setenv("HUBSPOT_ACCESS_TOKEN","top-secret")
+    health=ProviderHealthProbe(CredentialProvider()).probe("hubspot",object(),("crm.contact.search",))
+    assert health.credential_state=="available"
+    assert health.contract_ok is True
+    assert "top-secret" not in str(health.public())
