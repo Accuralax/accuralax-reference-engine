@@ -72,3 +72,24 @@ class Omega12AdvancedAIEvaluation:
     def health(self): return {"status":"ok","layers":"omega12.1-omega12.40","bounded":True,"tenant_scoped":True,"regression_detection":True,"release_gates":True,"engine":self.engine.health()}
     def production_readiness(self): return {"ready":True,"checks":{"evaluation_engine":True,"tenant_isolation":True,"regression_control":True,"release_gate":True,"lineage":True},"health":self.health()}
     def layer_status(self): return [{"layer":f"omega12.{i}","capability":n,"status":"implemented"} for i,n in self.CAPABILITIES.items()]
+
+    def bind_marketplace(self, marketplace):
+        self.marketplace = marketplace
+        return {"status":"bound","marketplace":type(marketplace).__name__}
+
+    def evaluate_registered_agent(self, tenant_id, workspace_id, agent_id, model_id, dataset_id, scores, *, model_version="1", previous_score=None):
+        if self.marketplace is None:
+            return {"status":"blocked","reason":"marketplace_not_bound"}
+        agent = self.marketplace.registry.get_agent(tenant_id, workspace_id, agent_id)
+        if not agent:
+            return {"status":"blocked","reason":"agent_not_registered"}
+        result = self.evaluate(tenant_id, workspace_id, agent_id=agent_id, model_id=model_id, model_version=model_version, dataset_id=dataset_id, scores=scores, previous_score=previous_score)
+        if result.get("evaluation_id"):
+            self.marketplace.evaluate(tenant_id, workspace_id, agent_id, passed=result.get("passed", False), score=result.get("overall_score", 0), evaluator="omega12", evidence={"evaluation_id":result["evaluation_id"]})
+        return result
+
+    def certification_gate(self, tenant_id, workspace_id, agent_id, model_id, dataset_id):
+        gate=self.release_gate(tenant_id, workspace_id, agent_id, model_id, dataset_id)
+        if not gate.get("release_allowed"):
+            return {"status":"blocked","reason":"omega12_release_gate_failed","gate":gate}
+        return {"status":"certified","certificate":self.certify(tenant_id,workspace_id,agent_id,model_id,dataset_id)}
