@@ -3,14 +3,17 @@ import json, hashlib
 ROOT=Path(__file__).resolve().parents[1]; DATA=ROOT/"data"/"apex_parallel"
 a20=json.loads((DATA/"apex20_full_regression_certification.json").read_text(encoding="utf-8"))
 stages=json.loads((DATA/"apex_stage_certification.json").read_text(encoding="utf-8"))
+offline=json.loads((DATA/"apex_offline_production_certification.json").read_text(encoding="utf-8")) if (DATA/"apex_offline_production_certification.json").exists() else {"status":"MISSING"}
 live_required=["APEX-A29","APEX-A30"]
 live_block=[x["stage"] for x in stages["stages"] if x["stage"] in live_required and x.get("offline")]
-release_allowed=bool(a20["status"]=="CERTIFIED" and not live_block)
+offline_ok=offline.get("status")=="CERTIFIED_OFFLINE"
+release_allowed=bool(a20["status"]=="CERTIFIED" and offline_ok and not live_block)
 result={
  "pipeline":"APEX-A19→A33→Ω",
  "build_state":"COMPLETE",
  "regression":"CERTIFIED_657",
- "offline_stage_verification":"COMPLETE",
+ "offline_stage_verification":"COMPLETE" if offline_ok else "BLOCKED",
+ "offline_certification":"CERTIFIED_OFFLINE" if offline_ok else "MISSING_OR_FAILED",
  "live_external_certification":"BLOCKED_PENDING_LIVE_PROVIDER_EVIDENCE" if live_block else "COMPLETE",
  "release_allowed":release_allowed,
  "blocking_stages":live_block,
