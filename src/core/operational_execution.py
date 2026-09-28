@@ -111,6 +111,11 @@ class OperationalExecution:
                         t, w, wf["run_id"],
                         executor=lambda step: self._workflow_step_executor(t, w, actor_id, event_id, step, payload),
                         approved=bool(payload.get("approved", False)),
+                        command_control=self.command_control,
+                        actor_id=actor_id,
+                        risk=str(payload.get("risk", "read")),
+                        trace_id=trace_id,
+                        correlation_id=correlation_id,
                     )
                     result["workflow"] = workflow_result
                     result["workflow_executed"] = workflow_result.get("status") == "completed"

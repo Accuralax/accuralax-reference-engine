@@ -48,8 +48,13 @@ class WorkflowAutomation:
         with self.db() as c:r=c.execute("SELECT run_id,workflow_id,status,current_step,result,created_at,updated_at FROM runs WHERE run_id=? AND tenant_id=? AND workspace_id=?",(run_id,t,w)).fetchone()
         if not r:return None
         out=dict(zip(("run_id","workflow_id","status","current_step","result","created_at","updated_at"),r)); out["result"]=json.loads(out["result"] or "{}"); return out
-    def execute(self,t,w,run_id,executor=None,approved=False):
+    def execute(self,t,w,run_id,executor=None,approved=False,command_control=None,actor_id="system",risk="read",trace_id=None,correlation_id=None):
         t,w=self.scope(t,w); run=self.get_run(t,w,run_id)
+        if command_control:
+            decision = command_control.authorize(t, w, actor_id, "workflow.execute", risk=risk, approved=approved)
+            if not decision.get("allowed"):
+                with self.db() as c:c.execute("UPDATE runs SET status=?,result=?,updated_at=? WHERE run_id=? AND tenant_id=? AND workspace_id=?",("blocked",json.dumps({"reason":"command_control_denied","decision":decision}),self.now(),run_id,t,w))
+                return self.get_run(t,w,run_id)
         if not run:return {"allowed":False,"reason":"run_not_found"}
         wf=self.get(t,w,run["workflow_id"])
         if not wf:return {"allowed":False,"reason":"workflow_not_found"}
