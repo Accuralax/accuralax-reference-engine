@@ -133,7 +133,23 @@ class Omega11AgentMarketplace:
     def route(self, tenant_id, workspace_id, requirements, *, risk="low", policy=None):
         selected=self.select(tenant_id,workspace_id,requirements,risk=risk,policy=policy)
         if selected["status"]!="selected": return selected
-        return {"status":"routed","execution_authority":"omega9","selection":selected}
+        agent_id=selected["agent_id"]; key=self._key(tenant_id,workspace_id,agent_id)
+        availability=self._availability.get(key,{"available":True})
+        capacity=self._capacity.get(key,{"max_concurrency":1,"current":0})
+        if not availability.get("available",True): return {"status":"blocked","reason":"agent_unavailable"}
+        if int(capacity.get("current",0)) >= int(capacity.get("max_concurrency",1)): return {"status":"blocked","reason":"agent_capacity_exceeded"}
+        return {"status":"routed","execution_authority":"omega9","selection":selected,"governance":self.governance(tenant_id,workspace_id,agent_id)}
+
+    def converge_request(self, tenant_id, workspace_id, requirements, *, risk="low", policy=None, operation_id=None):
+        route=self.route(tenant_id,workspace_id,requirements,risk=risk,policy=policy)
+        if route.get("status")!="routed": return route
+        self._record("request.converged",tenant_id=str(tenant_id),workspace_id=str(workspace_id),operation_id=operation_id or "",agent_id=route["selection"]["agent_id"])
+        return {"status":"ready","stage":"omega11","operation_id":operation_id,"routing":route,"execution_authority":"omega9"}
+
+    def record_outcome(self, tenant_id, workspace_id, agent_id, *, success, latency_ms=0, cost=0):
+        self.performance(tenant_id,workspace_id,agent_id,success_rate=1.0 if success else 0.0,latency_ms=latency_ms,samples=1)
+        self._record("agent.outcome",tenant_id=str(tenant_id),workspace_id=str(workspace_id),agent_id=str(agent_id),success=bool(success),latency_ms=float(latency_ms),cost=float(cost))
+        return {"status":"recorded","agent_id":str(agent_id),"success":bool(success)}
 
     def delegate(self, tenant_id, workspace_id, delegator_id, requirements, *, delegation_count=0, risk="low"):
         if int(delegation_count)>=self.max_delegations:
