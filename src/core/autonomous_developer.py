@@ -137,13 +137,38 @@ class AutonomousDeveloper:
         return {"status": proposal.get("status"), "proposal": proposal, "tests": tests,
                 "rationale": patch.get("rationale", "developer-agent proposal")}
 
+    def run_regression(self, tests: list[str] | tuple[str, ...], *, timeout_seconds: int = 120, full: bool = False) -> dict[str, Any]:
+        """Run bounded pytest verification and return an auditable result."""
+        selected = [str(t).replace("\\", "/") for t in tests if t]
+        if full:
+            command = [str(self.root / ".venv" / "Scripts" / "python.exe"), "-m", "pytest", "-q"]
+        else:
+            command = [str(self.root / ".venv" / "Scripts" / "python.exe"), "-m", "pytest", "-q", *selected]
+        if not (self.root / ".venv" / "Scripts" / "python.exe").exists():
+            command = ["python", "-m", "pytest", "-q", *([] if full else selected)]
+        started = time.monotonic()
+        try:
+            completed = subprocess.run(command, cwd=self.root, capture_output=True, text=True,
+                                       timeout=max(5, min(int(timeout_seconds), 600)))
+            output = (completed.stdout + "\n" + completed.stderr).strip()
+            passed = completed.returncode == 0
+            result = {"status": "passed" if passed else "failed", "returncode": completed.returncode,
+                      "tests": selected, "full": full, "duration_seconds": round(time.monotonic()-started, 3),
+                      "output_tail": output[-4000:]}
+        except subprocess.TimeoutExpired as exc:
+            result = {"status": "timeout", "returncode": None, "tests": selected, "full": full,
+                      "duration_seconds": round(time.monotonic()-started, 3), "output_tail": str(exc)[:4000]}
+        self.events.append({"stage": "regression", **result})
+        return result
+
     def sandbox_and_score(self, candidate_id: str, *, baseline_score: float = 0.0) -> dict[str, Any]:
         verification = self.autonomous.sandbox_verify(candidate_id)
         candidate = self.autonomous.candidates.get(candidate_id)
         if not candidate:
             return {"status": "blocked", "reason": "candidate_not_found"}
         test_score = 100.0 if verification.get("verified") else 0.0
-        regression_score = 100.0 if verification.get("verified") and baseline_score >= 0 else 0.0
+        regression = self.run_regression(candidate.tests, timeout_seconds=120) if verification.get("verified") else {"status": "blocked", "reason": "sandbox_failed"}
+        regression_score = 100.0 if regression.get("status") == "passed" else 0.0
         scope_score = 100.0 if len(candidate.replacement.splitlines()) <= 300 else 60.0
         safety_score = 0.0 if candidate.target in self.PROTECTED else 100.0
         total = round(test_score * .45 + regression_score * .25 + scope_score * .15 + safety_score * .15, 2)
