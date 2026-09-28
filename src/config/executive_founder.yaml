@@ -1,0 +1,26 @@
+id: CFS-EXECUTIVE-FOUNDER
+version: "1.0"
+
+executive_founder:
+  entities: [executive_profile, strategic_priority, decision, board_matter, executive_brief, approval, portfolio_snapshot, risk_posture]
+  lifecycle:
+    priority: [proposed, approved, active, paused, completed, retired]
+    decision: [draft, pending, approved, rejected, superseded]
+    board_matter: [draft, scheduled, presented, action_required, closed]
+    executive_brief: [draft, reviewed, approved, archived]
+  controls:
+    executive_authority_checked: true
+    high_impact_decisions_require_human_approval: true
+    financial_commitments_require_approval: true
+    legal_or_regulatory_decisions_require_approval: true
+    board_records_require_audit: true
+    source_lineage_required: true
+    credentials_never_exposed: true
+  intelligence:
+    dimensions: [strategy, finance, operations, projects, people, customers, risks, quality, technology]
+    confidence_required: true
+    stale_data_must_be_flagged: true
+  ai_agent:
+    role: governed_founder_office_assistant
+    may: [summarise, research, prepare_briefings, compare_options, identify_risks, track_priorities, draft_decision_memos]
+    must_request_approval_for: [strategic_decision, financial_commitment, legal_action, policy_change, external_commitment]

@@ -1,0 +1,30 @@
+id: CFS-GOVERNANCE-REGULATORY
+version: "1.0"
+
+governance_regulatory:
+  entities: [policy, regulation, obligation, control, compliance_assessment, evidence, legal_requirement, privacy_rule, consent_record, terms_condition, exception]
+  lifecycle:
+    policy: [draft, review, approved, active, superseded, retired]
+    regulation: [identified, assessed, monitored, superseded, archived]
+    obligation: [identified, assigned, in_progress, compliant, overdue, waived]
+    compliance_assessment: [planned, in_progress, compliant, partial, non_compliant, closed]
+    exception: [requested, reviewed, approved, rejected, expired]
+  controls:
+    source_authority_required: true
+    effective_date_required: true
+    owner_required: true
+    evidence_required: true
+    privacy_and_consent_traceability: true
+    regulatory_changes_require_review: true
+    policy_conflicts_require_escalation: true
+    legal_decisions_require_human_review: true
+    audit_required: true
+    credentials_never_exposed: true
+  intelligence:
+    dimensions: [compliance, regulatory_change, privacy, legal, policy, obligations, evidence, exceptions]
+    confidence_required: true
+    stale_sources_must_be_flagged: true
+  ai_agent:
+    role: governed_governance_compliance_assistant
+    may: [classify, summarise, map_obligations, identify_gaps, compare_policies, prepare_compliance_brief]
+    must_request_human_review_for: [legal_interpretation, regulatory_decision, policy_exception, high_impact_compliance_decision]

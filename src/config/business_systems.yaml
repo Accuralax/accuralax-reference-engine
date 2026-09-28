@@ -1,0 +1,45 @@
+﻿version: 1
+
+policy:
+  default_action: deny
+  require_idempotency: true
+  require_audit: true
+  external_side_effects_require_approval: true
+  secrets_never_enter_agent_context: true
+
+systems:
+  whatsapp:
+    category: customer_messaging
+    actions: [read_messages, send_message, create_handoff]
+    side_effects: [send_message, create_handoff]
+  make:
+    category: automation
+    actions: [trigger_webhook, read_scenario_status]
+    side_effects: [trigger_webhook]
+  hubspot:
+    category: crm
+    actions: [search_contact, search_company, search_deal, create_contact, create_company, create_deal, update_contact, update_deal, create_task]
+    side_effects: [create_contact, create_company, create_deal, update_contact, update_deal, create_task]
+  website:
+    category: web
+    actions: [read_form_submission, create_lead, update_lead]
+    side_effects: [create_lead, update_lead]
+  social:
+    category: social
+    actions: [read_messages, publish_post, create_lead]
+    side_effects: [publish_post, create_lead]
+  qx:
+    category: analytics
+    actions: [read_account, read_reports]
+    side_effects: []
+  wolas:
+    category: ai_platform
+    actions: [read_agent_status, create_task, read_usage]
+    side_effects: [create_task]
+
+rules:
+  - "Agents request business capabilities, never raw provider credentials."
+  - "Adapters translate approved capabilities into provider-specific API calls."
+  - "Provider-specific permissions are isolated from agent permissions."
+  - "Every side effect requires an idempotency key and audit event."
+  - "Destructive or irreversible actions require human approval."

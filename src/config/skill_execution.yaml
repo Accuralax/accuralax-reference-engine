@@ -1,0 +1,41 @@
+id: CFS-SKILL-EXECUTION
+version: "1.0"
+
+runtime:
+  model: governed_skill_execution
+  default_access: deny
+  max_steps: 8
+  max_delegations: 3
+  cycle_detection: true
+  checkpoint_required: true
+  trace_required: true
+
+lifecycle: [discover, plan, authorize, execute, verify, learn, trace]
+
+controls:
+  identity_required: true
+  skill_scope_required: true
+  policy_check_required: true
+  bounded_execution: true
+  timeout_required: true
+  result_verification_required: true
+  provenance_required: true
+  credentials_never_exposed: true
+  failed_skills_cannot_self_approve: true
+
+delegation:
+  least_privilege: true
+  child_scope_cannot_expand: true
+  approval_authority_not_delegated: true
+
+failure:
+  retry_bounded: true
+  checkpoint_before_retry: true
+  cycle_detection: true
+  terminal_failure: true
+  escalation_required: true
+
+learning:
+  successful_verified_runs_can_be_recorded: true
+  unverified_runs_require_review: true
+  procedural_memory_cannot_override_policy: true

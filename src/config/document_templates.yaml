@@ -1,0 +1,46 @@
+templates:
+  executive_brief:
+    document_type: executive_brief
+    audience: executive
+    sections: [purpose, context, key_findings, options, decision_required, next_steps]
+    approval: founder
+  proposal:
+    document_type: proposal
+    audience: client
+    sections: [cover, executive_summary, problem, solution, scope, deliverables, timeline, commercial, assumptions, next_steps]
+    approval: founder
+  business_plan:
+    document_type: business_plan
+    audience: investor
+    sections: [executive_summary, business_model, market, operations, marketing, financials, risks, roadmap]
+    approval: founder
+  funding_proposal:
+    document_type: funding_proposal
+    audience: funder
+    sections: [executive_summary, organisation, problem, programme, beneficiaries, implementation, budget, monitoring, sustainability]
+    approval: founder
+  tender_response:
+    document_type: tender_response
+    audience: procurement
+    sections: [compliance_matrix, company_profile, technical_response, methodology, team, implementation, pricing, declarations]
+    approval: founder
+  report:
+    document_type: report
+    audience: professional
+    sections: [title, executive_summary, methodology, findings, analysis, risks, recommendations, appendix]
+    approval: reviewer
+  policy:
+    document_type: policy
+    audience: organisation
+    sections: [purpose, scope, definitions, policy, responsibilities, controls, exceptions, review]
+    approval: founder
+  sop:
+    document_type: sop
+    audience: operations
+    sections: [purpose, scope, roles, prerequisites, procedure, controls, records, escalation, review]
+    approval: process_owner
+  presentation:
+    document_type: presentation
+    audience: mixed
+    sections: [title, context, problem, solution, evidence, roadmap, call_to_action]
+    approval: founder

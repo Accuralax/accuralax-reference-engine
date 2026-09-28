@@ -1,0 +1,32 @@
+version: 1
+
+documents:
+  - id: it-helpdesk-001
+    domain: support
+    title: "IT Helpdesk Baseline"
+    tags: [helpdesk, ticket, troubleshooting, user, support]
+    content: "Capture the symptom, affected service, business impact, recent change, and safe reproduction steps before escalating or changing systems."
+  - id: it-endpoint-001
+    domain: technician
+    title: "Endpoint Troubleshooting Baseline"
+    tags: [computer, laptop, printer, endpoint, hardware, software]
+    content: "Check power, connectivity, device status, supported software, recent changes, logs, and reversible configuration before proposing a repair."
+  - id: it-network-001
+    domain: ict
+    title: "ICT Connectivity Baseline"
+    tags: [ict, network, wifi, internet, vpn, connectivity]
+    content: "Validate scope, connectivity path, DNS, addressing, authentication state, and monitoring evidence before recommending network changes."
+  - id: it-mis-001
+    domain: mis
+    title: "MIS Reporting Baseline"
+    tags: [mis, report, dashboard, data quality, workflow, records]
+    content: "Define reporting purpose, source systems, data owner, refresh frequency, quality checks, access controls, and required outputs before changing information workflows."
+  - id: it-security-001
+    domain: security
+    title: "IT Support Security Baseline"
+    tags: [security, password, access, credentials, phishing, incident]
+    content: "Never request or store passwords, API keys, tokens, or payment details. Suspected security incidents require controlled escalation and human review."
+retrieval:
+  max_results: 3
+  minimum_score: 1
+  source_type: local_approved

@@ -1,0 +1,31 @@
+id: CFS-SALES-MARKETING
+version: "1.0"
+
+sales_marketing:
+  channels: [website, email, whatsapp, social, phone]
+  entities: [campaign, sequence, outreach, proposal, follow_up, attribution, opportunity]
+  lifecycle:
+    campaign: [draft, approved, active, paused, completed, archived]
+    outreach: [planned, queued, sent, delivered, replied, opted_out, failed]
+    proposal: [draft, review, approved, sent, accepted, rejected, expired]
+    follow_up: [scheduled, due, completed, cancelled]
+  controls:
+    consent_before_marketing: true
+    opt_out_honoured: true
+    ambiguous_consent_is_not_consent: true
+    external_send_requires_policy_check: true
+    financial_or_contractual_commitments_require_approval: true
+    credentials_never_exposed: true
+    audit_required: true
+  content:
+    variants: [email, whatsapp, social, website, phone_script]
+    personalization_requires_verified_customer_context: true
+    unsupported_claims_prohibited: true
+  intelligence:
+    attribution_dimensions: [source, campaign, channel, touchpoint]
+    pipeline_metrics: [lead_to_opportunity, opportunity_to_proposal, proposal_to_won, response_rate]
+    confidence_required: true
+  ai_agent:
+    role: governed_sales_assistant
+    may: [research, draft, classify, score, recommend_next_step, schedule_follow_up]
+    must_request_approval_for: [external_send, proposal_commitment, pricing_change, contract_action]

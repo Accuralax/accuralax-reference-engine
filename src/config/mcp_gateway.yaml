@@ -1,0 +1,54 @@
+version: 1
+
+mission:
+  purpose: "Controlled MCP gateway between CyberFusion agents and approved systems."
+  principles:
+    - read_only_by_default
+    - least_privilege
+    - credential_isolation
+    - approval_for_side_effects
+    - idempotency
+    - auditability
+
+policy:
+  default_action: deny
+  default_mode: read_only
+  credentials_exposed_to_agents: false
+  require_idempotency_for_side_effects: true
+  require_human_approval_for_side_effects: true
+  require_audit: true
+
+systems:
+  github:
+    actions: [read_repository, read_file, read_issue, read_pull_request]
+    write_actions_require_approval: true
+  desktop:
+    actions: [inspect_files, inspect_processes, read_logs]
+    write_actions_require_approval: true
+  supabase:
+    actions: [read_schema, read_data, inspect_logs]
+    write_actions_require_approval: true
+  vercel:
+    actions: [read_projects, read_deployments, read_logs]
+    write_actions_require_approval: true
+  obsidian:
+    actions: [read_notes, search_notes]
+    write_actions_require_approval: true
+  claude_code:
+    actions: [inspect_workspace, read_code]
+    write_actions_require_approval: true
+  make:
+    actions: [read_scenario_status]
+    write_actions_require_approval: true
+  hubspot:
+    actions: [search_contact, search_company, search_deal]
+    write_actions_require_approval: true
+  whatsapp:
+    actions: [read_messages]
+    write_actions_require_approval: true
+  website:
+    actions: [read_form_submission, read_lead]
+    write_actions_require_approval: true
+  social:
+    actions: [read_messages]
+    write_actions_require_approval: true

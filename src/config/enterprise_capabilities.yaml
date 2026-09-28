@@ -1,0 +1,80 @@
+platform:
+  id: CFS-ENTERPRISE
+  name: CyberFusion Enterprise Intelligence, Operations & Governance Platform
+  version: "1.0"
+  principle: governed_unified_platform
+
+capabilities:
+  executive_founder:
+    owner: platform
+    domains: [founder_office, executive_briefing, decisions, approvals]
+  governance:
+    owner: governance
+    domains: [policies, regulations, ethics, terms_conditions, privacy, compliance, risk, controls]
+  identity_access:
+    owner: security
+    domains: [users, organisations, roles, permissions, service_accounts, agent_identity]
+  finance:
+    owner: finance
+    domains: [accounting, management_accounting, budgeting, forecasting, tax, audit, reconciliation]
+  payments:
+    owner: finance
+    domains: [checkout, invoices, subscriptions, transactions, refunds, settlement, fraud_controls]
+  business_intelligence:
+    owner: data_platform
+    domains: [kpis, semantic_metrics, dashboards, reporting, insights, forecasting]
+  data_intelligence:
+    owner: data_platform
+    domains: [internal_data, external_data, ingestion, quality, lineage, provenance, retention]
+  knowledge_library:
+    owner: knowledge
+    domains: [documents, research, policies, contracts, rag, metadata, versioning]
+  research_development:
+    owner: r_and_d
+    domains: [research, experiments, prototypes, innovation, ip, technology_scouting]
+  portfolio_projects:
+    owner: operations
+    domains: [portfolio, programmes, projects, tasks, milestones, resources, risks]
+  products_services:
+    owner: product
+    domains: [product_lifecycle, service_lifecycle, pricing, quality, support, feedback]
+  crm_customer:
+    owner: commercial
+    domains: [customers, leads, opportunities, onboarding, support, customer_health]
+  sales_marketing:
+    owner: commercial
+    domains: [sales, campaigns, marketing, outreach, pipeline]
+  pr_communications:
+    owner: communications
+    domains: [brand, content, pr, media, social, announcements, crisis_comms]
+  creative_documents:
+    owner: creative
+    domains: [documents, content, image, video, presentations, templates, export]
+  cybersecurity:
+    owner: security
+    domains: [iam, threats, incidents, vulnerabilities, security_testing, security_operations]
+  it_operations:
+    owner: it
+    domains: [assets, infrastructure, service_desk, incidents, sla, automation, recovery]
+  engineering:
+    owner: engineering
+    domains: [software, systems, cloud, architecture, testing, delivery]
+  procurement_supply_chain:
+    owner: operations
+    domains: [suppliers, rfq, purchase_orders, inventory, logistics, procurement_analytics]
+  quality:
+    owner: quality
+    domains: [qa, qc, testing, inspections, defects, corrective_actions, continuous_improvement]
+  ai_agentic:
+    owner: ai_platform
+    domains: [agents, sub_agents, skills, models, prompts, mcp, evaluation, ai_risk]
+  observability_self_healing:
+    owner: platform
+    domains: [logs, metrics, traces, health, audit, bounded_repair, rollback]
+
+control_plane:
+  mandatory: [identity, policy, permissions, approvals, audit, provenance, risk]
+  high_risk_actions_require_approval: true
+  credentials_exposed_to_agents: false
+  external_side_effects_require_policy_check: true
+  destructive_actions_require_explicit_approval: true

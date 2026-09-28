@@ -1,0 +1,30 @@
+id: CFS-PAYMENTS-FINANCIAL
+version: "1.0"
+
+payments_financial:
+  entities: [account, invoice, bill, transaction, payment, refund, ledger_entry, reconciliation, budget, financial_report]
+  lifecycle:
+    invoice: [draft, issued, partially_paid, paid, overdue, void]
+    payment: [pending, authorized, captured, failed, refunded, reversed]
+    refund: [requested, approved, processed, rejected]
+    reconciliation: [unreconciled, matched, exception, resolved]
+  controls:
+    double_entry_required: true
+    immutable_ledger: true
+    payment_idempotency_required: true
+    payment_approval_required: true
+    refund_approval_required: true
+    reconciliation_required: true
+    segregation_of_duties: true
+    sensitive_exports_require_approval: true
+    external_side_effects_require_policy_check: true
+    audit_required: true
+    credentials_never_exposed: true
+  intelligence:
+    dimensions: [revenue, cashflow, receivables, payables, margin, budget, payment_success, reconciliation, profitability]
+    confidence_required: true
+    stale_data_must_be_flagged: true
+  ai_agent:
+    role: governed_finance_assistant
+    may: [summarise, classify, reconcile_candidates, analyse_cashflow, prepare_financial_report, identify_anomalies]
+    must_request_approval_for: [payment, refund, ledger_adjustment, budget_change, sensitive_export]

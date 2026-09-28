@@ -1,0 +1,66 @@
+id: CFS-LMS-TRAINING
+version: "1.0"
+
+platform:
+  name: CyberFusion Learning & Training Management System
+  principles: [learner_centric, competency_based, governed_ai, accessibility, auditability]
+
+entities:
+  - learner
+  - instructor
+  - course
+  - curriculum
+  - module
+  - lesson
+  - learning_object
+  - assessment
+  - question
+  - attempt
+  - grade
+  - attendance
+  - cohort
+  - enrolment
+  - certificate
+  - credential
+  - learning_path
+  - training_programme
+  - content_version
+  - ai_generation
+  - learning_event
+
+lifecycle:
+  course: [draft, review, approved, published, archived]
+  enrolment: [pending, active, completed, withdrawn, suspended]
+  assessment: [draft, review, published, closed]
+  certificate: [draft, issued, revoked]
+  content: [draft, generated, reviewed, approved, published, superseded]
+
+controls:
+  learner_identity_required: true
+  instructor_authorisation_required: true
+  content_review_required: true
+  ai_generated_content_requires_review: true
+  assessment_integrity_required: true
+  grading_provenance_required: true
+  certificate_issuance_requires_completion: true
+  sensitive_learner_data_minimised: true
+  accessibility_required: true
+  audit_required: true
+  credentials_never_exposed: true
+
+ai:
+  roles:
+    ai_tutor: [explain, coach, quiz, summarise, personalise]
+    ai_course_architect: [outline, map_competencies, sequence_learning]
+    ai_content_generator: [generate_lessons, examples, activities, quizzes, rubrics]
+    ai_assessor: [draft_feedback, analyse_attempts, identify_gaps]
+    ai_learning_advisor: [recommend_paths, identify_skill_gaps]
+  constraints:
+    generated_content_is_not_authoritative: true
+    human_review_before_publication: true
+    human_review_for_high_impact_assessment: true
+    no_automatic_final_certification: true
+
+intelligence:
+  dimensions: [enrolment, completion, attendance, engagement, competency, assessment, retention, instructor_performance, course_quality]
+  dashboards: [learner, instructor, programme, executive]

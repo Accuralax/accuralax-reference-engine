@@ -1,0 +1,57 @@
+from __future__ import annotations
+
+from typing import Any
+
+from ..core.mcp_gateway import MCPGateway
+from .adapters.base import AdapterResult, BusinessSystemAdapter
+from .execution import AuditedExecutor
+
+
+class MCPIntegrationRouter:
+    """Route approved MCP capabilities through the audited execution boundary."""
+
+    def __init__(
+        self,
+        gateway: MCPGateway,
+        adapters: dict[str, BusinessSystemAdapter],
+        executor: AuditedExecutor | None = None,
+    ) -> None:
+        self.gateway = gateway
+        self.adapters = adapters
+        self.executor = executor or AuditedExecutor()
+
+    def execute(
+        self,
+        system: str,
+        action: str,
+        payload: dict[str, Any] | None = None,
+        *,
+        approved: bool = False,
+        idempotency_key: str | None = None,
+    ) -> dict[str, Any]:
+        decision = self.gateway.authorize(
+            system, action, approved=approved, idempotency_key=idempotency_key
+        )
+        if not decision.allowed:
+            return {"authorized": False, "status": "denied", "reason": decision.reason}
+
+        adapter = self.adapters.get(system)
+        if not adapter:
+            return {"authorized": False, "status": "failed", "reason": "adapter_not_configured"}
+
+        body = payload or {}
+        key = idempotency_key or self.executor.ledger.fingerprint(system, action, body)
+        holder: dict[str, AdapterResult] = {}
+
+        def operation() -> None:
+            result = adapter.execute(action, body)
+            holder["result"] = result
+            if not result.ok:
+                raise RuntimeError(result.error or "adapter_execution_failed")
+        receipt = self.executor.execute(system, action, key, operation)
+        return {
+            "authorized": True,
+            "status": receipt.status,
+            "receipt": receipt.public(),
+            "result": {"ok": bool(holder.get("result") and holder["result"].ok)},
+        }

@@ -1,0 +1,35 @@
+id: CFS-ENTERPRISE-KNOWLEDGE
+version: "1.0"
+
+knowledge:
+  entities: [knowledge_item, document, source, collection, chunk, embedding, citation, version, research_item, evidence]
+  source_types: [document, website, api, research, regulation, policy, database, user_input, partner]
+  trust_levels: [unverified, low, medium, high, authoritative]
+  lifecycle:
+    source: [discovered, validated, active, stale, disputed, archived]
+    knowledge_item: [received, validated, indexed, stale, disputed, archived]
+    document: [draft, reviewed, approved, superseded, archived]
+  pipeline: [ingest, validate, classify, extract, chunk, embed, index, retrieve, rerank, verify, cite]
+  retrieval:
+    hybrid: true
+    semantic: true
+    keyword: true
+    reranking: true
+    freshness_check: true
+    conflict_detection: true
+    minimum_provenance: true
+  controls:
+    source_identity_required: true
+    content_hash_required: true
+    provenance_required: true
+    authoritative_sources_require_verification: true
+    stale_sources_must_be_flagged: true
+    conflicting_sources_require_review: true
+    generated_content_cannot_be_authoritative: true
+    credentials_never_indexed: true
+    sensitive_collections_access_controlled: true
+    audit_required: true
+  ai_agent:
+    role: governed_knowledge_assistant
+    may: [retrieve, summarise, compare_sources, cite, identify_conflicts, flag_stale_content, prepare_research_brief]
+    must_request_review_for: [authority_change, disputed_source_resolution, sensitive_collection_access]

@@ -1,0 +1,31 @@
+crm:
+  id: CFS-CRM
+  version: "1.0"
+  consent_required_for_marketing: true
+  credentials_never_exposed: true
+
+entities: [contact, organisation, customer, lead, opportunity, interaction, consent, handoff, campaign]
+
+lifecycle:
+  lead: [new, qualified, nurturing, converted, disqualified]
+  opportunity: [new, discovery, proposal, negotiation, won, lost]
+  customer: [active, paused, churned, archived]
+
+controls:
+  duplicate_detection: true
+  contact_identity_verification: true
+  consent_before_marketing: true
+  consent_withdrawal_supported: true
+  handoff_requires_explicit_consent: true
+  ambiguous_consent_is_not_consent: true
+  sensitive_customer_data_minimised: true
+  external_crm_writes_require_audit: true
+
+lead_scoring:
+  dimensions: [fit, intent, engagement, urgency, completeness]
+  labels: [low, medium, high]
+
+communications:
+  channels: [website, email, whatsapp, social, phone]
+  interaction_history_required: true
+  opt_out_must_be_honoured: true

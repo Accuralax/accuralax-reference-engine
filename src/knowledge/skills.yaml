@@ -1,0 +1,84 @@
+version: 1
+
+skills:
+  intake:
+    name: Client Intake
+    purpose: Collect only the information required to understand a request.
+    triggers: [new_enquiry, clarification_required]
+    requires_consent: false
+    human_review: false
+
+  service_triage:
+    name: Service Triage
+    purpose: Map a request to a known CyberFusion service or flag it as ambiguous.
+    triggers: [new_enquiry, clarification_required]
+    requires_consent: false
+    human_review: false
+
+  knowledge_lookup:
+    name: Knowledge Lookup
+    purpose: Retrieve approved local service knowledge and response rules.
+    triggers: [service_detected, customer_question]
+    requires_consent: false
+    human_review: false
+
+  proposal_scoping:
+    name: Solution Scoping
+    purpose: Convert a digital, software, AI, or automation need into structured requirements.
+    triggers: [ai_automation, website, software_app, digital]
+    requires_consent: false
+    human_review: false
+
+  cybersecurity_triage:
+    name: Cybersecurity Triage
+    purpose: Safely classify cybersecurity concerns without collecting secrets.
+    triggers: [cybersecurity, suspected_incident]
+    requires_consent: false
+    human_review: true
+
+  consent:
+    name: Consent Checkpoint
+    purpose: Confirm explicit client consent before ownership transfer or human handoff.
+    triggers: [handoff_ready]
+    requires_consent: true
+    human_review: false
+
+  handoff:
+    name: Human Handoff
+    purpose: Transfer an approved interaction to the appropriate human owner.
+    triggers: [consent_confirmed]
+    requires_consent: true
+    human_review: true
+
+  audit:
+    name: Audit & Traceability
+    purpose: Record important state transitions against the interaction reference.
+    triggers: [all_major_transitions]
+    requires_consent: false
+    human_review: false
+
+  safety_guard:
+    name: Safety Guard
+    purpose: Prevent credential collection, unsupported claims, and unauthorized actions.
+    triggers: [all_requests]
+    requires_consent: false
+    human_review: true
+
+execution:
+  order:
+    - safety_guard
+    - intake
+    - service_triage
+    - knowledge_lookup
+    - proposal_scoping
+    - cybersecurity_triage
+    - consent
+    - handoff
+    - audit
+
+  rules:
+    - "A skill may only operate within its declared purpose."
+    - "Skills cannot override application safety rules."
+    - "Human handoff requires explicit consent."
+    - "Ambiguous requests must not be silently classified."
+    - "Secrets must never be requested or stored."

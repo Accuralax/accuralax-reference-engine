@@ -1,0 +1,97 @@
+version: 1
+
+documents:
+  - id: biz-strategy-001
+    function: strategy
+    title: "Strategy Planning Baseline"
+    tags: [strategy, planning, growth, market, risk, transformation]
+    content: "Define objectives, current state, constraints, market context, competitive position, risks, measurable outcomes, initiatives, owners and review cadence before recommending strategic change."
+
+  - id: biz-finance-001
+    function: finance
+    title: "Finance Controls Baseline"
+    tags: [finance, budget, accounting, cashflow, funding, controls]
+    content: "Separate financial facts from assumptions, identify the period and source of figures, document budgets and cash flow, and require authorized human review for transactions and financial decisions."
+
+  - id: biz-sales-001
+    function: sales_marketing
+    title: "Sales and Marketing Baseline"
+    tags: [sales, marketing, brand, pricing, campaigns, crm, seo]
+    content: "Define target audience, value proposition, offer, channel, funnel stage, campaign objective, measurement and consent requirements before activating outreach or publishing."
+
+  - id: biz-rnd-001
+    function: research_development
+    title: "R&D and Innovation Baseline"
+    tags: [research, development, innovation, prototype, experimentation]
+    content: "State the hypothesis, evidence required, experiment design, success criteria, intellectual-property considerations and prototype boundary before product experimentation."
+
+  - id: biz-it-001
+    function: information_technology
+    title: "Business IT Baseline"
+    tags: [it, systems, software, hardware, cloud, network, security]
+    content: "Diagnose before changing systems, preserve evidence, use least privilege, test reversible changes first, and route production or external changes through approved gateways."
+
+  - id: biz-customer-001
+    function: customer_service
+    title: "Customer Service Baseline"
+    tags: [customer, support, complaints, retention, feedback]
+    content: "Capture the customer issue, affected service, impact, history and requested outcome; resolve within authority and escalate refunds, compensation or account changes for approval."
+
+  - id: biz-hr-001
+    function: human_resources
+    title: "HR Operations Baseline"
+    tags: [hr, recruitment, employees, performance, workforce]
+    content: "Protect employee information, separate factual records from recommendations, apply consistent process controls, and require authorized human decisions for hiring, termination and compensation changes."
+
+  - id: biz-design-001
+    function: design
+    title: "Design Delivery Baseline"
+    tags: [design, ui, ux, branding, creative, content]
+    content: "Start from audience, purpose, requirements, accessibility, brand constraints and acceptance criteria; prototype before release and obtain approval for publication or brand changes."
+
+  - id: biz-communications-001
+    function: communications
+    title: "Communications Baseline"
+    tags: [communications, pr, media, crisis, executive]
+    content: "Identify audience, message purpose, facts, approvals, channel and timing; treat crisis and external executive communications as approval-gated."
+
+  - id: biz-governance-001
+    function: governance
+    title: "Governance Baseline"
+    tags: [governance, policy, controls, accountability, risk, compliance]
+    content: "Define authority, accountability, decision rights, controls, evidence, exceptions and review cadence; governance changes require authorized approval."
+
+  - id: biz-production-001
+    function: production
+    title: "Production Operations Baseline"
+    tags: [production, manufacturing, capacity, scheduling, delivery]
+    content: "Define capacity, inputs, process, schedule, quality criteria, dependencies and constraints before changing production commitments or schedules."
+
+  - id: biz-sourcing-001
+    function: sourcing
+    title: "Sourcing and Procurement Baseline"
+    tags: [sourcing, procurement, purchasing, suppliers, supply_chain]
+    content: "Compare requirements, suppliers, price, quality, delivery, risk and contractual terms; purchasing and supplier commitments require authorized approval."
+
+  - id: biz-quality-001
+    function: quality_management
+    title: "Quality Management Baseline"
+    tags: [quality, qa, qc, testing, assurance, improvement]
+    content: "Define quality criteria, test evidence, acceptance thresholds, defect handling, corrective action and continuous-improvement feedback before release."
+
+  - id: biz-distribution-001
+    function: distribution
+    title: "Distribution Baseline"
+    tags: [distribution, fulfillment, delivery, channels, inventory]
+    content: "Define inventory state, fulfillment path, delivery requirements, channel constraints, customer destination and evidence before dispatch or channel changes."
+
+  - id: biz-operations-001
+    function: operations
+    title: "Operations Management Baseline"
+    tags: [operations, workflows, process, capacity, performance]
+    content: "Map the current process, dependencies, owners, inputs, outputs, service levels and performance measures before changing operational workflows."
+
+retrieval:
+  max_results: 3
+  minimum_score: 1
+  source_type: local_approved

@@ -1,0 +1,27 @@
+id: CFS-PROCUREMENT-SUPPLY-CHAIN
+version: "1.0"
+
+procurement_supply_chain:
+  entities: [supplier, vendor, sourcing_event, purchase_request, purchase_order, contract, shipment, inventory_item, receipt, supplier_risk]
+  lifecycle:
+    purchase_request: [draft, submitted, approved, rejected, ordered, fulfilled, cancelled]
+    purchase_order: [draft, approved, sent, acknowledged, partially_received, received, cancelled]
+    contract: [draft, review, approved, active, expired, terminated]
+    shipment: [planned, dispatched, in_transit, delivered, exception]
+    supplier: [prospect, active, suspended, blocked, archived]
+  controls:
+    supplier_onboarding_requires_review: true
+    purchase_approval_required: true
+    contract_commitments_require_approval: true
+    external_side_effects_require_policy_check: true
+    segregation_of_duties: true
+    supplier_risk_assessment_required: true
+    audit_required: true
+    credentials_never_exposed: true
+  intelligence:
+    dimensions: [cost, quality, delivery, supplier_risk, inventory, spend, contract, continuity]
+    confidence_required: true
+  ai_agent:
+    role: governed_procurement_assistant
+    may: [research, classify, compare, summarise, identify_supplier_risk, analyse_spend, recommend_next_step]
+    must_request_approval_for: [supplier_activation, purchase_order, contract_commitment, supplier_blocking]

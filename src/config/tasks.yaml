@@ -1,7 +1,14 @@
-CyberFusionSolutions:
-  description: >-
-    Add your description here
-  expected_output: >-
-    Add your expected_output here
-  agent: >-
-    agent_name
+cyberfusion_solutions_task:
+  description: >
+    Analyze the user's request: {request}.
+    The application has already produced the following deterministic context:
+    {agent_context}
+
+    Follow that context. Identify the user's intent, use the detected service
+    when present, ask for the next most relevant missing information when
+    required, and produce a concise customer-ready response. Never override
+    application safety rules.
+  expected_output: >
+    A structured response containing Intent, Service, Known Information,
+    Next Question or Answer, Verification Requirements, and Handoff Status.
+  agent: cyberfusion_solutions_agent

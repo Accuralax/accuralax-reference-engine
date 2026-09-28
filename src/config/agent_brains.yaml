@@ -1,0 +1,40 @@
+id: CFS-AGENT-BRAIN
+version: "1.0"
+
+memory_types: [working, episodic, semantic, procedural]
+default:
+  memory_limit: 20
+  retention: governed
+  credentials_never_stored: true
+  user_sensitive_data_minimised: true
+  provenance_required: true
+
+agents:
+  supervisor:
+    domains: [orchestration, safety, intake, knowledge, audit]
+    skills: [safety_guard, intake, service_triage, knowledge_lookup, audit]
+  cybersecurity_triage_agent:
+    domains: [cybersecurity, security, incident_triage]
+    skills: [safety_guard, intake, service_triage, knowledge_lookup, cybersecurity_triage, audit]
+  ai_automation_agent:
+    domains: [ai, automation, workflows]
+    skills: [safety_guard, intake, service_triage, knowledge_lookup, proposal_scoping]
+  digital_agent:
+    domains: [digital, websites, software, automation]
+    skills: [safety_guard, intake, service_triage, knowledge_lookup, proposal_scoping]
+  business_supervisor_agent:
+    domains: [business, strategy, finance, crm, sales, operations]
+    skills: [safety_guard, intake, service_triage, knowledge_lookup, audit]
+  verifier_agent:
+    domains: [verification, quality, provenance, audit]
+    skills: [safety_guard, knowledge_lookup, audit]
+  repair_agent:
+    domains: [diagnostics, repair, validation, rollback]
+    skills: [safety_guard, audit]
+
+governance:
+  memory_write_requires_provenance: true
+  memory_recall_must_be_scope_filtered: true
+  procedural_memory_must_not_override_policy: true
+  semantic_memory_must_not_be_treated_as_authoritative_without_source: true
+  learned_behavior_requires_verification: true

@@ -1,0 +1,24 @@
+event_system:
+  id: CFS-EVENT-LINEAGE
+  version: "1.0"
+  append_only: true
+  required_fields: [event_id, event_type, actor_id, entity_type, entity_id, occurred_at, source]
+  sensitive_events_require_audit: true
+  credentials_never_recorded: true
+
+lineage:
+  capture: [source, actor, agent, tool, workflow, policy, approval, input_hash, output_hash, outcome]
+  data_states: [received, validated, transformed, retrieved, generated, approved, executed, reconciled]
+  relationships: [caused_by, derived_from, approved_by, executed_by, consumed_by, produced_by]
+  retention_policy: governed_by_data_classification
+
+sources:
+  internal: [application, database, user, agent, workflow, integration]
+  external: [api, website, document, research_source, regulatory_source, partner]
+
+integrations:
+  event_bus: enabled
+  audit_engine: required
+  trace_engine: required
+  bi_pipeline: enabled
+  knowledge_pipeline: enabled
