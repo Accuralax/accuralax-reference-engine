@@ -117,6 +117,22 @@ def test_reconciliation_worker_is_bounded(tmp_path):
     assert result.scanned==0 and result.replayed==0
 
 
+def test_integration_observability_reconciliation_metrics(tmp_path):
+    from core.observability import Observability
+    from integrations.integration_observability import IntegrationObservability
+    from integrations.reconcile import ReconcileBatch
+    store=Observability(str(tmp_path/"obs.sqlite3"))
+    obs=IntegrationObservability(store)
+    batch=ReconcileBatch(3,3,2,1,0,0,({"attempts":2},{"attempts":1},{"attempts":1}))
+    obs.record_queue_depth("t","w",3)
+    obs.record_reconciliation("t","w",batch)
+    snap=obs.snapshot("t","w")
+    assert snap["metric_totals"]["integration.reconciliation.queue_depth"]==3
+    assert snap["metric_totals"]["integration.reconciliation.completed"]==2
+    assert snap["metric_totals"]["integration.reconciliation.failed"]==1
+    assert snap["metric_totals"]["integration.retry.attempts"]==4
+
+
 def test_provider_health_contract_probe_hides_credentials(monkeypatch):
     from integrations.provider_health import ProviderHealthProbe
     from integrations.credentials import CredentialProvider
