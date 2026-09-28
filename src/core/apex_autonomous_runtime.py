@@ -67,28 +67,20 @@ class ApexAutonomousRuntime:
         readiness = self.readiness()
         if readiness["status"] != "ready":
             return {"status": "blocked", "reason": "runtime_not_ready", "readiness": readiness}
-        if self.supabase.enabled:
-            lease = self.supabase.claim_worker("APEX_CANONICAL_WORKER")
-            if lease.get("status") != "acquired":
-                return {"status": "blocked", "reason": "worker_lease_unavailable", "lease": lease}
-        else:
-            lease = {"status": "local", "reason": "supabase_not_configured"}
         try:
+            # CanonicalOmegaWorker owns lease acquisition and ? execution through
+            # OmegaRuntimeAdapter. Do not claim/release a second lease here.
             result = self.continuous.tick(tenant_id, workspace_id)
             self.ticks += 1
             if self.supabase.enabled:
                 self.supabase.snapshot("HEALTHY", {"tick": self.ticks, "worker": result.get("status")})
             return {"status": result.get("status", "completed"), "tick": self.ticks,
-                    "lease": lease, "result": result}
+                    "lease": result.get("result", {}).get("lease"), "result": result}
         except Exception as exc:
             if self.supabase.enabled:
                 self.supabase.snapshot("FAILED", {"tick": self.ticks},
                                        [{"type": "exception", "error": f"{type(exc).__name__}: {exc}"}])
-                self.supabase.release_worker("APEX_CANONICAL_WORKER", error=str(exc))
             return {"status": "failed", "error": f"{type(exc).__name__}: {exc}"}
-        finally:
-            if self.supabase.enabled:
-                self.supabase.release_worker("APEX_CANONICAL_WORKER")
 
     def run(self, *, iterations: int = 1, interval_seconds: float = 1.0,
             tenant_id: str = "", workspace_id: str = "") -> dict[str, Any]:
