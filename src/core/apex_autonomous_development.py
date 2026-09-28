@@ -128,7 +128,7 @@ class ApexAutonomousDevelopment:
             self.events.append({"stage": "sandbox", "candidate_id": candidate_id, "status": "rejected", "reason": "timeout"})
             return result
         finally:
-            shutil.rmtree(sandbox_root.parent, ignore_errors=True)
+            shutil.rmtree(sandbox_root, ignore_errors=True)
 
     def approve(self, candidate_id: str, actor_id: str, *, approved: bool = False) -> dict[str, Any]:
         if not approved:
