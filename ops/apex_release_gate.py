@@ -8,7 +8,7 @@ ROOT = Path(__file__).resolve().parents[1]
 PYTHON = ROOT / ".venv" / "Scripts" / "python.exe"
 FILES = sorted((ROOT / "tests").glob("test_*.py"), key=lambda p: p.name)
 BATCH = 6
-ENV = {**os.environ, "PYTEST_DISABLE_PLUGIN_AUTOLOAD": "1"}
+ENV = {**os.environ, "PYTEST_DISABLE_PLUGIN_AUTOLOAD": "1", "PYTEST_ADDOPTS": "--import-mode=importlib"}
 LOG = ROOT / "data" / "apex_release_gate.log"
 
 
