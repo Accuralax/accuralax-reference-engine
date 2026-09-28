@@ -142,3 +142,23 @@ class EnterpriseIntegrationLayer:
         t,w=self._scope(t,w)
         with self._db() as c: rows=c.execute("SELECT * FROM integration_jobs WHERE tenant_id=? AND workspace_id=? ORDER BY created_at DESC LIMIT ?",(t,w,max(1,min(int(limit),500)))).fetchall()
         return [self._row(r) for r in rows]
+    def reconciliation_queue(self, tenant_id, workspace_id, limit=100):
+        t,w=self._scope(tenant_id,workspace_id)
+        with self._db() as c:
+            rows=c.execute("SELECT * FROM integration_jobs WHERE tenant_id=? AND workspace_id=? AND status IN ('failed','dead_letter') ORDER BY updated_at ASC LIMIT ?",(t,w,max(1,min(int(limit),500)))).fetchall()
+        return [self._row(r) for r in rows]
+
+    def replay(self, tenant_id, workspace_id, job_id, actor_id="reconciler"):
+        job=self.get(tenant_id,workspace_id,job_id)
+        if job["status"] not in ("failed","dead_letter"):
+            return job
+        if job["attempts"] >= self.max_attempts:
+            self._update(job_id,tenant_id,workspace_id,status="queued",attempts=0,reason="reconciliation_reset")
+        return self.run(tenant_id,workspace_id,job_id,actor_id)
+
+    def reconcile(self, tenant_id, workspace_id, *, replay=False, limit=100, actor_id="reconciler"):
+        queued=self.reconciliation_queue(tenant_id,workspace_id,limit)
+        if not replay:
+            return {"queued":len(queued),"jobs":queued}
+        results=[self.replay(tenant_id,workspace_id,j["job_id"],actor_id) for j in queued]
+        return {"queued":len(queued),"replayed":len(results),"results":results}
