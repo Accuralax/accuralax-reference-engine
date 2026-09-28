@@ -1,4 +1,5 @@
 from __future__ import annotations
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -7,6 +8,16 @@ ROOT = Path(__file__).resolve().parents[1]
 PYTHON = ROOT / ".venv" / "Scripts" / "python.exe"
 FILES = sorted((ROOT / "tests").glob("test_*.py"), key=lambda p: p.name)
 BATCH = 6
+ENV = {**os.environ, "PYTEST_DISABLE_PLUGIN_AUTOLOAD": "1"}
+LOG = ROOT / "data" / "apex_release_gate.log"
+
+
+def run(args: list[str]) -> int:
+    LOG.parent.mkdir(parents=True, exist_ok=True)
+    with LOG.open("a", encoding="utf-8") as log:
+        result = subprocess.run([str(PYTHON), *args], cwd=ROOT, env=ENV, stdout=log, stderr=subprocess.STDOUT)
+    return result.returncode
+
 
 def main() -> int:
     if len(sys.argv) == 1:
@@ -21,9 +32,9 @@ def main() -> int:
     print(f"APEX_BATCH_START={n} FILES={len(group)}", flush=True)
     for p in group:
         print(f"APEX_FILE={p.name}", flush=True)
-    result = subprocess.run([str(PYTHON), "-m", "pytest", "-q", *map(str, group)], cwd=ROOT)
-    print(f"APEX_BATCH_RESULT={n} EXIT={result.returncode}", flush=True)
-    return result.returncode
+    code = run(["-m", "pytest", "-q", *map(str, group)])
+    print(f"APEX_BATCH_RESULT={n} EXIT={code}", flush=True)
+    return code
 
 if __name__ == "__main__":
     raise SystemExit(main())
