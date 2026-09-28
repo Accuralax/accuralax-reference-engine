@@ -53,8 +53,11 @@ class EventBus:
             event=DomainEvent("EVT-"+uuid.uuid4().hex[:12].upper(),event_type,str(tenant_id),str(workspace_id),str(actor_id),str(entity_type),str(entity_id),str(reference_id),safe,datetime.now(timezone.utc).isoformat(),trace_id)
             c.execute("INSERT INTO domain_events VALUES (?,?,?,?,?,?,?,?,?,?,?,?)",(event.event_id,event.event_type,event.tenant_id,event.workspace_id,event.actor_id,event.entity_type,event.entity_id,event.reference_id,json.dumps(event.payload,sort_keys=True),event.occurred_at,event.trace_id,idempotency_key))
         for handler in tuple(self.handlers.get(event_type,[])):
-            try: handler(event)
-            except Exception: pass
+            try:
+                handler(event)
+            except Exception:
+                # Handler failures must not corrupt the durable event record.
+                pass
         return event
     def publish_entity_change(self,entity_model,event_type,tenant_id,workspace_id,actor_id,entity_type,payload,reference_id="",idempotency_key=None,trace_id=None):
         record=entity_model.upsert(tenant_id,workspace_id,entity_type,payload)
