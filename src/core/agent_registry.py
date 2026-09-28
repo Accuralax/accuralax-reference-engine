@@ -14,7 +14,7 @@ import yaml
 class AgentRegistry:
     """Durable, tenant-scoped registry for governed agents and capabilities."""
 
-    STATUSES = {"draft", "active", "paused", "retired"}
+    STATUSES = {"draft", "active", "paused", "deprecated", "retired"}
 
     def __init__(self, db_path: str | None = None) -> None:
         self.db_path = db_path or os.path.join("data", "agent_registry.sqlite3")
