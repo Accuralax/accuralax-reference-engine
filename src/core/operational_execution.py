@@ -49,7 +49,8 @@ class OperationalExecution:
             c.execute("CREATE TABLE IF NOT EXISTS runs(run_id TEXT PRIMARY KEY,tenant_id TEXT,workspace_id TEXT,event_id TEXT,event_type TEXT,status TEXT,task_id TEXT,result TEXT,created_at TEXT,updated_at TEXT,trace_id TEXT,correlation_id TEXT,UNIQUE(tenant_id,workspace_id,event_id))")
     @contextmanager
     def db(self):
-        c = sqlite3.connect(self.db_path)
+        c = sqlite3.connect(self.db_path, timeout=15.0)
+        c.execute("PRAGMA busy_timeout=15000")
         try:
             yield c
             c.commit()

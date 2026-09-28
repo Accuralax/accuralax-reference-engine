@@ -34,7 +34,10 @@ class RegulatoryIntelligence:
                 assessment_id TEXT PRIMARY KEY,tenant_id TEXT,workspace_id TEXT,regulation_id TEXT,
                 applicable INTEGER,profile_json TEXT,assessed_at TEXT)""")
 
-    def db(self): return sqlite3.connect(self.db_path)
+    def db(self):
+        c = sqlite3.connect(self.db_path, timeout=15.0)
+        c.execute("PRAGMA busy_timeout=15000")
+        return c
     def scope(self,t,w):
         if not t or not w: raise ValueError("tenant_id_and_workspace_id_required")
         return str(t),str(w)
