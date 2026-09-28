@@ -7,6 +7,15 @@ from src.core.session_store import InMemoryConversationStore, SQLiteConversation
 
 
 class SessionAndGatewayTests(unittest.TestCase):
+    def test_sqlite_busy_timeout(self) -> None:
+        with __import__("tempfile").TemporaryDirectory() as directory:
+            store = SQLiteConversationStore(Path(directory) / "sessions.sqlite3")
+            conn = store._connect()
+            try:
+                self.assertEqual(conn.execute("PRAGMA busy_timeout").fetchone()[0], 15000)
+            finally:
+                conn.close()
+
     def test_sqlite_session_survives_new_orchestrator(self) -> None:
         db = Path(self.id().replace(".", "_") + ".sqlite3")
         try:
