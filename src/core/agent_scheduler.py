@@ -44,6 +44,11 @@ class AgentScheduler:
         while not self._stop.is_set():
             self._tick(); self._stop.wait(self.interval)
     def start(self):
+        health=getattr(self.worker,"health",None)
+        if callable(health):
+            state=health()
+            if state.get("status") in {"degraded","failed"}:
+                return {"status":"blocked","reason":"worker_not_ready","worker_health":state}
         reconcile=getattr(self.worker,"reconcile",None)
         if callable(reconcile): reconcile()
         with self._lock:
