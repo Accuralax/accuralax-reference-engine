@@ -20,10 +20,11 @@ TESTS=[
 
 def main():
     env=os.environ.copy()
+    env["PYTHONPATH"] = str(ROOT / "src") + os.pathsep + str(ROOT) + os.pathsep + env.get("PYTHONPATH", "")
     env.pop("HUBSPOT_ACCESS_TOKEN",None)
     env.pop("MAKE_API_TOKEN",None)
     env.pop("MAKE_WEBHOOK_URL",None)
-    cmd=[sys.executable,"-m","pytest","-q","--disable-warnings",*TESTS]
+    cmd=[sys.executable,"-m","pytest","-q","--disable-warnings","--import-mode=importlib",*TESTS]
     p=subprocess.run(cmd,cwd=ROOT,env=env,text=True,capture_output=True)
     OUT.parent.mkdir(parents=True,exist_ok=True)
     report={"timestamp":datetime.now(timezone.utc).isoformat(),

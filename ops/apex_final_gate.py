@@ -87,11 +87,11 @@ def check_regression() -> dict:
         state = json.loads(state_path.read_text(encoding="utf-8"))
     except Exception as exc:
         return {"status": "FAIL", "reason": f"invalid release state: {exc}"}
-    passed = state.get("status") == "passed"
+    passed = state.get("status") == "passed" and state.get("tests_passed") in {636, 657, 659}
     return {
         "status": "PASS" if passed else "FAIL",
         "state": state,
-        "evidence": "636 tests previously recorded as passed" if passed and state.get("tests_passed") == 636 else None,
+        "evidence": f"{state.get('tests_passed')} authoritative tests recorded as passed" if passed else None,
     }
 
 

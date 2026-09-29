@@ -32,6 +32,9 @@ def run(*, interval: float = 15.0, max_cycles: int | None = None) -> int:
     if not PYTHON.is_file():
         log("BLOCKED python_runtime_missing")
         return 2
+    if max_cycles is not None and max_cycles < 1:
+        log("BLOCKED invalid_max_cycles")
+        return 2
     children: dict[str, subprocess.Popen] = {}
     backoff: dict[str, int] = {"api": 5, "omega": 5}
     cycles = 0
